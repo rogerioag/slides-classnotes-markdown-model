@@ -1,0 +1,8 @@
+
+[terminal]
+
+rogerio@chamonix:hello-world$ ./hello-world.exe 
+Hello World!!!
+Teste
+
+[/terminal]

@@ -1,0 +1,438 @@
+
+\usepackage{color}
+\usepackage{verbatim}
+
+\usepackage{listings} % display code on slides; don't forget [fragile] option after \begin{frame}
+\usepackage{lstlisting-llvm}
+
+% Opçõess de listing usados para o codigo fonte
+% Ref: http://en.wikibooks.org/wiki/LaTeX/Packages/Listings
+\lstset{ %
+language=Java,                  % choose the language of the code
+basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+%basicstyle=\ttfamily,
+stringstyle=\ttfamily\color[rgb]{0.16,0.16,0.16},
+numbers=left,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it's 1 each line will be numbered
+numbersep=2pt,                  % how far the line-numbers are from the code
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=true,					% show tabs within strings adding particular underscores
+frame=single,	                % adds a frame around the code
+framerule=0.6pt,
+tabsize=2,	                	% sets default tabsize to 2 spaces
+%keepspaces,					% set one line at code final.
+% extendedchars=true,
+inputencoding=utf8,
+extendedchars=true,
+literate={á}{{\'a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {ç}{{\c{c}}}1,
+captionpos=b,                   % sets the caption-position to bottom
+breaklines=true,                % sets automatic line breaking
+breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+aboveskip=5pt,
+upquote=true,
+columns=fixed,
+escapeinside={\%*}{*)},         % if you want to add a comment within your code
+backgroundcolor=\color[rgb]{1.0,1.0,1.0}, % choose the background color.
+rulecolor=\color[rgb]{0.8,0.8,0.8},
+xleftmargin=10pt,
+xrightmargin=10pt,
+framexleftmargin=10pt,
+framexrightmargin=10pt
+}
+
+%%% RAG----------------------------------------------------------------%
+%-----------------------Style Definitions------------------------------%
+\definecolor{javared}{rgb}{0.6,0,0} % for strings
+\definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
+\definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
+\definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
+
+\definecolor{DarkBlue}{rgb}{0,0,0.61}
+\definecolor{DarkGreen}{rgb}{0,0.4,0}
+\definecolor{DarkRed}{rgb}{0.51,0,0}
+\definecolor{DarkBlue2}{rgb}{0.25,0.51,0}
+
+% Numeros.
+\lstdefinestyle{mynumbers}{
+	numbers=left,
+	stepnumber=1,
+	numbersep=4pt,
+	numberstyle=\tiny\color{black}
+}
+% Text Code.
+\lstdefinestyle{mytextcode}{
+	basicstyle=\footnotesize,
+	tabsize=2,
+	showspaces=false,
+	showstringspaces=false,
+	extendedchars=true,
+	breaklines=true
+}
+% Frame.
+\lstdefinestyle{myframe}{
+	backgroundcolor=\color{white},
+	frame=trbl
+}
+
+% Formatar código automaticamente.
+% http://tex.stackexchange.com/questions/166674/can-the-listings-package-automatically-indent-source-code
+% Usar isso, carregando junto com a declaração do pacote.
+% \usepackage[formats]{listings}
+% ou:
+\lstloadaspects{formats}
+
+\lstdefineformat{C}
+{
+	\{=\newline\string\newline\indent,%
+	\}=\newline\noindent\string\newline,%
+	;=[\ ]\string\space,%
+}
+% C++ Style.
+\lstdefinestyle{C++}{
+	language=C++,
+	format=C,
+	style=mynumbers,
+	style=mytextcode,
+	style=myframe,
+	keywordstyle=\color{black}\bfseries,
+	stringstyle=\color{gray},
+	commentstyle=\color[rgb]{0.439,0.50,0.56}, % rgb: 112, 128, 144 / 255 https://www.techfak.uni-bielefeld.de/~walter/misc/colorRGB.pdf
+	morecomment=[s]{/*}{*/},
+	morecomment=[l]{//},
+	otherkeywords={dim3},
+  	emph={ \_\_device\_\_, \_\_global\_\_, \_\_shared\_\_, \_\_host\_\_, \_\_constant\_\_},
+	emphstyle=\color{DarkBlue}\bfseries,
+	emph={[2] printf, scanf, \#include, \#define, \#pragma, \#typedef},
+	emphstyle=[2]\color{DarkGreen},
+}
+
+% C Style.
+\lstdefinestyle{C}{
+	language=C,
+	format=C,
+	style=mynumbers,
+	style=mytextcode,
+	style=myframe,
+	basicstyle=\ttfamily,
+	keywordstyle=\color{javapurple}\bfseries,
+  stringstyle=\color{gray}\bfseries,
+  commentstyle=\color[rgb]{0.439,0.50,0.56}, % rgb: 112, 128, 144 / 255 https://www.techfak.uni-bielefeld.de/~walter/misc/colorRGB.pdf
+  	% morecomment=[s][\color{lightgray}]{/*}{*/},
+  	% morecomment=[l][\color{lightgray}]{//},
+  	morecomment=[s]{/*}{*/}, % está usando a cor definida no commentstyle.
+  	morecomment=[l]{//},
+  	otherkeywords={dim3, \#define, \#pragma, \#typedef},
+  	emph={ \_\_device\_\_, \_\_global\_\_, \_\_shared\_\_, \_\_host\_\_, \_\_constant\_\_},
+  	emphstyle=\color{DarkBlue}\bfseries,
+  	emph={[2] printf, scanf, \#include},
+  	emphstyle=[2]\color{DarkGreen},
+  	emph={[3] omp, oac},
+  	emphstyle=[3]\color{DarkRed},
+  	emph={[4] single, parallel, runtime},
+  	emphstyle=[4]\color{DarkBlue2},
+	backgroundcolor={},
+	identifierstyle=\color{black}	
+}
+% Bash Style.
+\lstdefinestyle{bash}{
+	language=bash,
+	style=mynumbers,
+	style=mytextcode,
+	style=myframe,
+	backgroundcolor={},
+	frame=single,
+	commentstyle=\color[rgb]{0.439,0.50,0.56}, % rgb: 112, 128, 144 / 255 https://www.techfak.uni-bielefeld.de/~walter/misc/colorRGB.pdf
+	%morecomment=[l]{#\},
+	basicstyle=\scriptsize\ttfamily
+}
+% Python Style.
+\lstdefinestyle{python}{
+	language=python,
+	style=mynumbers,
+	style=mytextcode,
+	style=myframe,
+	backgroundcolor={}
+}
+% Java Style.
+\lstdefinestyle{java}{
+	language=java,
+	style=mynumbers,
+	style=mytextcode,
+	style=myframe,
+	backgroundcolor={},
+	basicstyle=\ttfamily,
+	keywordstyle=\color{javapurple}\bfseries,
+	stringstyle=\color{javared},
+	commentstyle=\color{javagreen},
+	morecomment=[s][\color{javadocblue}]{/**}{*/}
+}
+% ASM Style.
+\lstdefinestyle{asm}{
+  %belowcaptionskip=1\baselineskip,
+  %xleftmargin=\parindent,
+  language=[x86masm]Assembler,
+  style=mynumbers,
+  style=mytextcode,
+  style=myframe,
+  backgroundcolor={},
+  frame=single,
+  basicstyle=\scriptsize\ttfamily,
+  keywordstyle=\color{javapurple}\bfseries,
+  stringstyle=\color{gray}\bfseries,
+  commentstyle=\itshape\color{red!40!gray},
+  morecomment=[l]{;},
+  identifierstyle=\color{black},
+  otherkeywords={movl, leaq, movq, subq, jmp, jg, pushq, popq, addl, cmpl, movss, cmpb, idivl, cltd},
+  emph={eax, ebx, ecx, edx, esi, edi, ebp, eip, esp, r8d, r9d, r10d, r11d, r12d, r13d, r14d, r15d},
+  emphstyle=\color{DarkGreen}\bfseries,
+  emph={[2]rax, rbx, rcx, rdx, rsi, rdi, rbp, rip, rsp, r8, r9, r10, r11, r12, r13, r14, r15},
+  emphstyle=[2]\color{DarkRed}\bfseries  
+}
+
+% Fortran Style.
+\lstdefinestyle{fortran}{
+  language=[90]Fortran,
+  style=mynumbers,
+  style=mytextcode,
+  style=myframe,
+  backgroundcolor={},
+  frame=single,
+  basicstyle=\footnotesize,
+  commentstyle=\itshape\color{purple!40!black},
+  morecomment=[l]{!\ }% Comment only with space after !
+}
+
+% LLVM Style.
+\lstdefinestyle{llvm}{
+	language=llvm,
+	%inputencoding=utf8,
+	style=mynumbers,
+	style=mytextcode,
+	style=myframe,
+	backgroundcolor={},
+	frame=single,
+	basicstyle=\scriptsize\ttfamily,
+  tabsize=4,
+  %rulecolor=,
+  upquote=true,
+% aboveskip={1.5\baselineskip},
+  columns=fixed,
+  prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+  showtabs=false,
+	%basicstyle=\scriptsize\upshape\ttfamily,
+  identifierstyle=\ttfamily,
+  keywordstyle=\ttfamily\bfseries\color[rgb]{0,0,0},
+  %commentstyle=\ttfamily\color[rgb]{0.133,0.545,0.133},
+  commentstyle=\ttfamily\color[rgb]{0.08,0.08,0.08},
+  %stringstyle=\ttfamily\color[rgb]{0.627,0.126,0.941}
+  stringstyle=\ttfamily\color[rgb]{0.16,0.16,0.16},
+  morecomment = [l]{;},
+    morestring=[b]", 
+    sensitive = true,
+    classoffset=0,
+    morekeywords={
+      define, declare, global, constant,
+      internal, external, private,
+      linkonce, linkonce_odr, weak, weak_odr, appending,
+      common, extern_weak,
+      thread_local, dllimport, dllexport,
+      hidden, protected, default,
+      except, deplibs,
+      volatile, fastcc, coldcc, cc, ccc,
+      x86_stdcallcc, x86_fastcallcc,
+      ptx_kernel, ptx_device,
+      signext, zeroext, inreg, sret, nounwind, noreturn,
+      nocapture, byval, nest, readnone, readonly, noalias, uwtable,
+      inlinehint, noinline, alwaysinline, optsize, ssp, sspreq,
+      noredzone, noimplicitfloat, naked, alignstack,
+      module, asm, align, tail, to,
+      addrspace, section, alias, sideeffect, c, gc,
+      target, datalayout, triple,
+      blockaddress
+    },
+    classoffset=1, keywordstyle=\color{purple},
+    morekeywords={
+      fadd, sub, fsub, mul, fmul,
+      sdiv, udiv, fdiv, srem, urem, frem,
+      and, or, xor,
+      icmp, fcmp,
+      eq, ne, ugt, uge, ult, ule, sgt, sge, slt, sle,
+      oeq, ogt, oge, olt, ole, one, ord, ueq, ugt, uge,
+      ult, ule, une, uno,
+      nuw, nsw, exact, inbounds,
+      phi, call, select, shl, lshr, ashr, va_arg,
+      trunc, zext, sext,
+      fptrunc, fpext, fptoui, fptosi, uitofp, sitofp,
+      ptrtoint, inttoptr, bitcast,
+      ret, br, indirectbr, switch, invoke, unwind, unreachable,
+      malloc, alloca, free, load, store, getelementptr,
+      extractelement, insertelement, shufflevector,
+      extractvalue, insertvalue,
+    },
+    alsoletter={\%},
+    keywordsprefix={\%},
+}
+
+\lstdefinestyle{pascal}{
+	language=pascal,
+	format=pascal,
+	style=mynumbers,
+	style=mytextcode,
+	style=myframe,
+	keywordstyle=\color{black}\bfseries,
+	stringstyle=\color{gray},
+	commentstyle=\color[rgb]{0.439,0.50,0.56}, % rgb: 112, 128, 144 / 255 https://www.techfak.uni-bielefeld.de/~walter/misc/colorRGB.pdf
+	morecomment=[s]{{}{}},
+	morekeywords={
+	}
+	emph={ \_\_device\_\_, \_\_global\_\_, \_\_shared\_\_, \_\_host\_\_, \_\_constant\_\_},
+	emphstyle=\color{DarkBlue}\bfseries,
+	emph={[2] leia, escreva},
+	emphstyle=[2]\color{DarkGreen},
+}
+
+% Adaptação para palavras até, senão, faça...
+\newcommand\keywordstyle[1]{{\color{black}\bfseries{#1}}}%
+
+%\usepackage{listings}
+\lstdefinelanguage{tpp}{
+    basicstyle=\ttfamily,
+    sensitive=true,
+    inputencoding=utf8,
+    extendedchars=true,
+    %alsoletter={_,ç,é,ã},
+    %literate={á}{{\'a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {ç}{{\c{c}}}1,
+    literate=%
+        {é}{{\'{e}}}1
+        {è}{{\`{e}}}1
+        {ê}{{\^{e}}}1
+        {ë}{{\¨{e}}}1
+        {É}{{\'{E}}}1
+        {Ê}{{\^{E}}}1
+        {û}{{\^{u}}}1
+        {ù}{{\`{u}}}1
+        {â}{{\^{a}}}1
+        {à}{{\`{a}}}1
+        {á}{{\'{a}}}1
+        {ã}{{\~{a}}}1
+        {Á}{{\'{A}}}1
+        {Â}{{\^{A}}}1
+        {Ã}{{\~{A}}}1
+        {ç}{{\c{c}}}1
+        {Ç}{{\c{C}}}1
+        {õ}{{\~{o}}}1
+        {ó}{{\'{o}}}1
+        {ô}{{\^{o}}}1
+        {Õ}{{\~{O}}}1
+        {Ó}{{\'{O}}}1
+        {Ô}{{\^{O}}}1
+        {î}{{\^{i}}}1
+        {Î}{{\^{I}}}1
+        {í}{{\'{i}}}1
+        {Í}{{\~{Í}}}1
+        {então}{{\keywordstyle{ent\~{a}o} }}5
+        {senão}{{\keywordstyle{sen\~{a}o} }}5
+        {faça}{{\keywordstyle{fa\c{c}a}}}4
+        {até}{{\keywordstyle{at\'{e} }}}3,
+    keywords = {se, até, então, senão, retorna, repita, fim, flutuante, inteiro, leia, escreva, principal, para, faça},
+    otherkeywords={=, <, >, :, =, <=, >=, :=, <>},
+    ndkeywords={leia,escreva},
+    morecomment=[l]{//},
+    morecomment=[s]{{\{}{\}}},
+    morestring=[b]"
+}
+
+
+\lstdefinestyle{tpp}{
+  language=tpp,
+  %format=tpp,
+  style=mynumbers,
+  style=mytextcode,
+  style=myframe,
+  keywordstyle=\color{black}\bfseries,
+  stringstyle=\color{gray},
+  commentstyle=\color[rgb]{0.439,0.50,0.56}, % rgb: 112, 128, 144 / 255 https://www.techfak.uni-bielefeld.de/~walter/misc/colorRGB.pdf
+  %morecomment=[s]{{}{}},
+  %morekeywords={
+  %  inteiro, fim 
+  %}
+  %emph={ },
+  emphstyle=\color{DarkBlue}\bfseries,
+  emph={[2] leia, escreva, retorna, principal},
+  emphstyle=[2]\color{DarkGreen},
+}
+
+\lstdefinelanguage{C}{%
+  language=C,
+  format=C,
+  style=mynumbers,
+  style=mytextcode,
+  style=myframe,
+  basicstyle=\ttfamily,
+  keywordstyle=\color{javapurple}\bfseries,
+  stringstyle=\color{gray}\bfseries,
+  commentstyle=\color[rgb]{0.439,0.50,0.56}, % rgb: 112, 128, 144 / 255 https://www.techfak.uni-bielefeld.de/~walter/misc/colorRGB.pdf
+    % morecomment=[s][\color{lightgray}]{/*}{*/},
+    % morecomment=[l][\color{lightgray}]{//},
+    morecomment=[s]{/*}{*/}, % está usando a cor definida no commentstyle.
+    morecomment=[l]{//},
+    otherkeywords={dim3, \#define, \#pragma, \#typedef},
+    emph={ \_\_device\_\_, \_\_global\_\_, \_\_shared\_\_, \_\_host\_\_, \_\_constant\_\_},
+    emphstyle=\color{DarkBlue}\bfseries,
+    emph={[2] printf, scanf, \#include},
+    emphstyle=[2]\color{DarkGreen},
+    emph={[3] omp, oac},
+    emphstyle=[3]\color{DarkRed},
+    emph={[4] single, parallel, runtime},
+    emphstyle=[4]\color{DarkBlue2},
+  backgroundcolor={},
+  identifierstyle=\color{black}
+}
+
+%% Code
+% \usepackage[table]{xcolor}
+\usepackage{listings}
+\lstdefinelanguage{Pseudo}{%
+    sensitive=false,
+    morekeywords={function, if, else, switch, case, while, for, True, False, and, or, xor, not, in, return, int},
+    otherkeywords={=, <, >, :, ==, <=, >=, <-, :=, ..},
+    morecomment=[l]{//},
+    morecomment=[s]{{/*}{*/}},
+    morestring=[b]"
+}
+
+\definecolor{greencomments}{rgb}{0,0.5,0}
+\definecolor{bluekw}{rgb}{0,0,0.5}
+\definecolor{redstrings}{rgb}{0.5,0,0}
+\definecolor{graylinenumbers}{rgb}{0.5,0.5,0.5}
+\lstset{%
+    basicstyle=\footnotesize\ttfamily,
+    columns=fullflexible,
+    breaklines=true,
+    breakatwhitespace,
+    extendedchars=true,
+    aboveskip=1em,
+    belowskip=1em,
+    % frame=single,
+    numbers=left,
+    xleftmargin=3em,
+    numbersep=5pt,
+    numberstyle=\tiny\color{graylinenumbers},
+    rulecolor=\color{black},
+    tabsize=2,
+    commentstyle=\color{greencomments},
+    keywordstyle=\color{bluekw}\bfseries,
+    stringstyle=\color{redstrings},
+    %language=Pseudo
+    backgroundcolor=\color{white},
+    frame=trbl,
+    rulecolor=\color{gray}
+}
+
+\renewcommand{\lstlistingname}{Código}
+
+%%% RAG----------------------------------------------------------------%
+
+%------------------------------------- Fonts and Colors ---------------------
