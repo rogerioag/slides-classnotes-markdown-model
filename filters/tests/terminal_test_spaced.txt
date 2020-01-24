@@ -1,0 +1,6 @@
+[terminal]
+
+rag@chamonix:$ ./test
+
+[/terminal]
+

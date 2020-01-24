@@ -114,6 +114,17 @@ $for(bibliography)$
 \addbibresource{$bibliography$}
 $endfor$
 $endif$
+
+$if(csl-refs)$
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newenvironment{cslreferences}%
+  {$if(csl-hanging-indent)$\setlength{\parindent}{0pt}%
+  \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces$endif$}%
+  {\par}
+$endif$
+
+
 \hypersetup{
 $if(title-meta)$
             pdftitle={$title-meta$},
@@ -264,7 +275,7 @@ $endif$
 
 $if(title)$
 \vspace{2.0cm}
-\title[$idsubjectcourseinstitution$]{\texttt{$title$}}
+\title[$idsubjectcourseinstitution$ -- v.$version$]{\texttt{$title$}}
 $endif$
 
 $if(subtitle)$
@@ -273,8 +284,7 @@ $endif$
 
 $if(author)$
 \normalsize
-% \author{$for(author)$$author$$sep$ \and $endfor$}
-%\author[$for(authorcitation)$$authorcitation$$sep$ \and $endfor$]{$for(author)$$author.name$\\\texttt{$author.email$}$sep$ \and $endfor$}
+
 \author[
 $for(author)$\tiny $author.citation$$sep$ e $endfor$
 ] % (optional)

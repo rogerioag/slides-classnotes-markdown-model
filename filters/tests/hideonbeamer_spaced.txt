@@ -1,0 +1,6 @@
+[hideonbeamer]
+
+Teste de nota oculta
+
+[/hideonbeamer]
+

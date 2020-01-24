@@ -1,0 +1,6 @@
+[hideonbeamer]
+[terminal]
+rogerio@chamonix:hello-world$  ./hello-world.exe
+rogerio@chamonix:hello-world$ Teste bosta
+[/terminal]
+[/hideonbeamer]

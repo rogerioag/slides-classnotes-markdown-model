@@ -1,0 +1,5 @@
+[hideonbeamer]
+[terminal]
+rogerio@chamonix:hello-world$ Without space
+[/terminal]
+[/hideonbeamer]

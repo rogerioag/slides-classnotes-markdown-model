@@ -1,0 +1,7 @@
+[Para [Str "Teste"]
+,Para [Str "[hideonbeamer]",SoftBreak,Str "Texto",Space,Str "oculto",SoftBreak,Str "[/hideonbeamer]"]
+,Para [Str "Bla"]
+,Para [Str "[hideonbeamer]"]
+,Para [Str "Texto",Space,Str "oculto"]
+,Para [Str "[/hideonbeamer]"]
+,Para [Str "Bla"]]

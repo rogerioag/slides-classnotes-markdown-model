@@ -1,10 +1,14 @@
-Regular text with Äüö.
+[hideonbeamer]
+Texto oculto
+[/hideonbeamer]
 
-<!-- BEGIN COMMENT -->
+Bla
 
-This is a comment with Äüö
+[hideonbeamer]
 
-<!-- END COMMENT -->
+Texto oculto
 
-This is regular text again.
+[/hideonbeamer]
+
+Bla
 
