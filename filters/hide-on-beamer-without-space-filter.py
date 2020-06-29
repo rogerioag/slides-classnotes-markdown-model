@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
 """
-Pandoc filter to convert all regular text to uppercase.
-Code, link URLs, etc. are not affected.
+Pandoc filter to comment text on beamer.
 """
 
 import pandocfilters as pf
-import csv, re
+import re
 
 begin_beamer = '\\begin{comment}'
 

@@ -10,7 +10,7 @@ def mk_columns(k, v, f, m):
             content = value[1:-1]
             if content == "columns":
                 if f == "beamer":
-                    return latex(r'\begin{columns}')
+                    return latex(r'\begin{columns}[T]')
                 elif f == "latex":
                     return latex(r'\begin{multicols}{2}')
             elif content == "/columns":
