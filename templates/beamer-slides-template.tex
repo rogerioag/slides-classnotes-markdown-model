@@ -1,3 +1,5 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
 \documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$babel-lang$,$endif$$if(handout)$handout,$endif$$if(beamer)$ignorenonframetext,$endif$$for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
 \setbeamertemplate{caption}[numbered]
 \setbeamertemplate{caption label separator}{: }
@@ -57,8 +59,29 @@ $endif$
 $if(colortheme)$
 \usecolortheme{$colortheme$}
 $else$
-% Define the rag default color.
-\usecolortheme[rgb={0.21, 0.27, 0.31}]{structure}
+
+  $if(theme)$
+  \usetheme{$theme$}
+  \expandafter\ifstrequal\expandafter{$theme$}{Madrid}{ % Begin Then
+    % Define the rag default color.
+    \usecolortheme[rgb={0.21, 0.27, 0.31}]{structure}
+  }
+  {
+    % \usecolortheme{metropolis}
+
+    %\definecolor{Purple}{HTML}{911146}
+    %\definecolor{Orange}{HTML}{CF4A30}
+
+    % Theme colors are derived from these two elements
+    %\setbeamercolor{alerted text}{fg=Orange}
+
+    % ... however you can of course override styles of all elements
+    %\setbeamercolor{frametitle}{bg=Orange}
+
+    \setmainfont{Fira Sans}
+  }
+  $endif$
+
 $endif$
 $if(fonttheme)$
 \usefonttheme{$fonttheme$}
@@ -110,6 +133,7 @@ $if(natbib)$
 $endif$
 $if(biblatex)$
 \usepackage[$if(biblio-style)$style=$biblio-style$,$endif$$for(biblatexoptions)$$biblatexoptions$$sep$,$endfor$]{biblatex}
+
 $for(bibliography)$
 \addbibresource{$bibliography$}
 $endfor$
@@ -195,17 +219,17 @@ $if(section-titles)$
     % retira a background image das seções.
     \usebackgroundtemplate{}
     \frame{\sectionpage}
-    % \frame{\fontsize{14pt}{7.2}\selectfont \begin{minipage}[t][\textheight][t]{\textwidth} \sectionpage \end{minipage}}
-    $if(banner-slides)$
-      % \usebackgroundtemplate{\includegraphics[trim=1.0cm 1.0cm 1.0cm 1.0cm, scale=0.47]{$banner$}}
-      \pgfdeclareimage[width=\paperwidth,height=\paperheight]{background}{$banner-slides$}
-      \usebackgroundtemplate{\pgfuseimage{background}}
-    $else$
-      % Tentativa de corrigir o problema de que quando se adiciona uma imagem as imagem de fundo desaparece.
-      % \usebackgroundtemplate{\includegraphics[trim=1.0cm 1.0cm 1.0cm 1.0cm, scale=0.47]{../templates/logos/header-utfpr.pdf}}
-      \pgfdeclareimage[width=\paperwidth,height=\paperheight]{background}{../templates/logos/header-utfpr.pdf}
-      \usebackgroundtemplate{\pgfuseimage{background}}
-    $endif$
+      % \frame{\fontsize{14pt}{7.2}\selectfont \begin{minipage}[t][\textheight][t]{\textwidth} \sectionpage \end{minipage}}
+      $if(banner-slides)$
+        % \usebackgroundtemplate{\includegraphics[trim=1.0cm 1.0cm 1.0cm 1.0cm, scale=0.47]{$banner$}}
+        %\pgfdeclareimage[width=\paperwidth,height=\paperheight]{background}{$banner-slides$}
+        %\usebackgroundtemplate{\pgfuseimage{background}}
+      $else$
+        % Tentativa de corrigir o problema de que quando se adiciona uma imagem as imagem de fundo desaparece.
+        % \usebackgroundtemplate{\includegraphics[trim=1.0cm 1.0cm 1.0cm 1.0cm, scale=0.47]{../templates/logos/header-utfpr.pdf}}
+        %%% rag \pgfdeclareimage[width=\paperwidth,height=\paperheight]{background}{../templates/logos/header-utfpr.pdf}
+        \usebackgroundtemplate{\pgfuseimage{background}}
+      $endif$
   \fi
 }
 \AtBeginSubsection{
@@ -255,6 +279,19 @@ $for(header-includes)$
 $header-includes$
 $endfor$
 
+%\usepackage{xspace}
+%\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+%\setbeamertemplate{frame footer}{\insertshortauthor~(\insertshortinstitute)}
+%\setbeamerfont{page number in head/foot}{size=\tiny}
+%\setbeamercolor{footline}{fg=gray}
+
+
+% Testing specific declarations based on chosen theme: Madrid or metropolis.
+\usepackage{etoolbox}
+$if(theme)$
+\usetheme{$theme$}
+\expandafter\ifstrequal\expandafter{$theme$}{Madrid}{ % Begin Then
 % background image.
 \setbeamertemplate{headline}{}
 $if(banner)$
@@ -290,7 +327,7 @@ $for(author)$\tiny $author.citation$$sep$ e $endfor$
 ] % (optional)
 {
 $for(author)$\small \textbf{$author.name$}\footnotesize\inst{$author.id$}\vspace{0.05in} $sep$ e $endfor$
-\vspace{-0.9cm}
+\vspace{-0.5cm}
 }
 \institute[]{
 \normalsize
@@ -310,13 +347,152 @@ $if(date)$
 $else$
 \date[\today]{}
 $endif$
+} % End o Then.
+{ % Begin Else. Metropolis.
+    % False!
 
+\usepackage{tikz}
+\usepackage{pgfopts}
+\usepackage{calc}
+\usepackage{ifxetex}
+\usepackage{ifluatex}
+
+\metroset{block=fill,numbering=fraction,progressbar=frametitle}
+\setbeamerfont{section title}{size=\LARGE, series=\bfseries}
+\setbeamerfont{frametitle}{size=\Large, series=\bfseries}
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}[subsections numbered]
+\setbeamerfont{normal text}{size=\large}
+
+% Configuration of metropolis. 
+%\setbeamerfont{title}{size=\Large, series=\bfseries}
+%\setbeamerfont{author}{size=\small}
+%\setbeamerfont{date}{size=\small}
+%\setbeamerfont{section title}{size=\Large, series=\bfseries}
+%\setbeamerfont{block title}{size=\normalsize, series=\bfseries}
+%\setbeamerfont{block title alerted}{size=\normalsize, series=\bfseries}
+%\setbeamerfont*{subtitle}{size=\large}
+%\setbeamerfont{frametitle}{size=\large, series=\bfseries}
+%\setbeamerfont{caption}{size=\small}
+%\setbeamerfont{caption name}{series=\bfseries}
+%\setbeamerfont{description item}{series=\bfseries}
+%\setbeamerfont{page number in head/foot}{size=\scriptsize}
+%\setbeamerfont{bibliography entry author}{size=\normalsize, series=\normalfont}
+%\setbeamerfont{bibliography entry title}{size=\normalsize, series=\bfseries}
+%\setbeamerfont{bibliography entry location}{size=\normalsize, series=\normalfont}
+%\setbeamerfont{bibliography entry note}{size=\small, series=\normalfont}
+%\setbeamerfont{standout}{size=\Large, series=\bfseries}
+
+%\setbeamertemplate{title graphic}{
+%\vbox to 0pt {
+%\vspace*{2em}
+%\inserttitlegraphic%
+%}%
+%\nointerlineskip%
+%}
+
+
+\setbeamercolor{footline}{fg=gray, bg=black}
+
+\definecolor{mycolor}{RGB}{35, 55, 59}
+
+%\setbeamerfont{frametitle}{size=\Large,series=\normalfont}
+\setbeamercolor{footline}{bg=mycolor,fg=white}
+\setbeamertemplate{frame footer}{A footline}
+
+%\makeatletter
+%\setlength{\metropolis@frametitle@padding}{1.6ex}% <- default 2.2 ex
+
+\setbeamertemplate{footline}{%
+  \begin{beamercolorbox}[wd=\textwidth, sep=1.0ex]{footline}% <- default 3ex
+    \usebeamerfont{page number in head/foot}%
+    \usebeamertemplate*{frame footer}
+    \hfill%
+    \usebeamertemplate*{frame numbering}
+  \end{beamercolorbox}%
+}
+
+\setbeamertemplate{frame footer}{\insertshortauthor~(\insertshortinstitute)\hfill\insertshorttitle\hfill}
+\setbeamerfont{page number in head/foot}{size=\tiny}
+
+$if(title)$
+% \title[$idsubjectcourseinstitution$ -- v.$version$]
+% {\texttt{$title$}}
+
+\title[$idsubjectcourseinstitution$ - $classnumber$ - v.$version$] %optional
+{\LARGE $title$}
+$endif$
+    
+$if(subtitle)$
+
+\subtitle{\Large $subtitle$}
+$endif$
+
+\author[
+$for(author)$\tiny $author.citation$$sep$ e $endfor$
+] % (optional)
+{
+$for(author)$\normalsize {$author.name$}\footnotesize\inst{$author.id$}\vspace{0.05in} $sep$ e $endfor$
+\vspace{-0.2cm}
+\newline
+% $for(author)$\normalsize\url{$author.email$}\vspace{0.05in} $sep$ e $endfor$
+$for(author)$\normalsize\href{mailto:$author.email$}{\nolinkurl{$author.email$}}$sep$ \and e $endfor$
+}
+
+\institute[UTFPR]{
+\normalsize
+$for(author)$
+\inst{$author.id$}%
+\footnotesize{\vspace{-0.15cm}$author.affiliation$ \\ \vspace{-0.15cm} $author.department$ \\ \vspace{-0.15cm} $author.citystatecountry$} $sep$ \and
+\vspace{-0.3cm}
+$endfor$
+\and
+$if(coursename)$
+\textbf{$coursename$}
+\vspace{-0.1cm}
+\\ $subjectname$
+\vspace{0.5cm}
+$endif$
+}
+
+$if(date)$
+\date[$date$]{$date$}
+$else$
+\date[\today]{}
+$endif$
+
+$if(titlegraphic)$
+\titlegraphic{\hfill\includegraphics[height=0.95cm]{$titlegraphic$}}
+$else$
+% \titlegraphic{\hfill\includegraphics[height=0.95cm]{../templates/logos/logo-utfpr.png}}
+\titlegraphic{%
+\begin{picture}(0,0)
+  \put(310,25){\makebox(0,0)[rt]{\hfill\includegraphics[height=0.95cm]{../templates/logos/logo-utfpr.png}}}
+\end{picture}}
+$endif$
+
+$if(logo)$
+\logo{\includegraphics{$logo$}}
+$endif$
+
+} % End o Else.
+$endif$
+
+% -----------------------------------------------------------------------------------------
 % Document.
 \begin{document}
 
 $if(title)$
 \frame{\vspace{1.0cm} \titlepage}
 $endif$
+
+% Hide progress bar and footline on titlepage
+%$if(title)$
+%  \begin{frame}[plain]
+%  \titlepage
+%  \end{frame}
+%$endif$
+
 
 % includes.
 $for(include-before)$

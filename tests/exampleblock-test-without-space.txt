@@ -1,0 +1,3 @@
+[exampleblock][Título]
+Bloco
+[/exampleblock]

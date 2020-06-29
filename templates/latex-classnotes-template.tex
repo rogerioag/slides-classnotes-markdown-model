@@ -238,6 +238,52 @@ $endfor$
   title={\centering Terminal}
 }
 
+\usepackage{xcolor}
+\definecolor{boxgrey}{RGB}{0.5,0.5,0.5}
+\definecolor{boxred}{RGB}{153, 51, 0}
+\definecolor{boxgreen}{RGB}{0, 102, 0}
+
+\usepackage{tcolorbox}
+
+% Info (information) tcolorbox
+% #1: tcolorbox options
+% #2: Box title 
+\newtcolorbox{blockbox}[2][]
+{
+colframe = black,
+colback  = black!10,
+coltitle = white, 
+left=0.5mm,right=0.5mm,top=0.5mm,bottom=0.5mm,middle=0.5mm, 
+title    = #2,
+#1,
+}
+
+% Hint tcolorbox
+% #1: tcolorbox options
+% #2: Box title
+\newtcolorbox{exampleblockbox}[2][]
+{
+colframe = boxgreen,
+colback  = boxgreen!10,
+coltitle = white,
+left=0.5mm,right=0.5mm,top=0.5mm,bottom=0.5mm,middle=0.5mm,
+title    = #2,
+#1,
+}
+
+% Warning tcolorbox
+% #1: tcolorbox options
+% #2: Box title
+\newtcolorbox{alertblockbox}[2][]
+{
+colframe = boxred,
+colback  = boxred!5!white,
+coltitle = white,
+left=0.5mm,right=0.5mm,top=0.5mm,bottom=0.5mm,middle=0.5mm,
+title    = #2,
+#1,
+}
+
 \begin{document}
 $if(banner-classnotes)$
 \begin{figure}
@@ -254,7 +300,7 @@ $else$
   \vspace{-1.0cm}
   % \includegraphics[width=0.5\linewidth]{$banner$}
   % trim={<left> <lower> <right> <upper>}
-  \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{../templates/logos/header-utfpr.pdf}
+  % \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{../templates/logos/header-utfpr.pdf}
   \vspace{-1.5cm}
 \end{figure}    
 $endif$
