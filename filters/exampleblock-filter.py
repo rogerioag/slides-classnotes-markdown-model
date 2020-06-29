@@ -7,7 +7,7 @@ end_beamer = '\end{type}'
 
 begin_latex = '\\begin{type}{title}'
 
-end_latex = '\end{type}'
+end_latex = '\end{type}\n\\vspace{0.3cm}'
 
 def latex(s):
     return pf.RawBlock('latex', s)

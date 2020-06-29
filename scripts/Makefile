@@ -29,7 +29,7 @@ FILTEROPTIONS += --filter ${DATADIR}/filters/background-filter.py
 # Common Options.
 COMMOM_OPTIONS += --verbose
 COMMOM_OPTIONS += -f markdown
-COMMOM_OPTIONS += --listings
+# COMMOM_OPTIONS += --listings
 #COMMOM_OPTIONS += --pdf-engine=pdflatex --pdf-engine-opt=""
 COMMOM_OPTIONS += --variable=version:2020.01
 
@@ -73,7 +73,7 @@ default:
 	@echo Executando make em paralelo [$(shell nproc) tarefas]
 	@make -s -j $(shell nproc) all
 
-all : clean slides-metropolis hangouts notes
+all : slides-metropolis hangouts notes
 
 # COMMOM_OPTIONS += --pdf-engine=pdflatex --pdf-engine-opt=""
 # SLIDES_OPTIONS += -V theme:Madrid
@@ -88,9 +88,9 @@ config-metropolis:
 	$(eval COMMOM_OPTIONS += $(shell echo '--pdf-engine=tectonic'))
 	$(eval SLIDES_OPTIONS += $(shell echo '-V theme:metropolis'))
 
-slides-madrid: clean config-madrid $(SLIDES)
+slides-madrid: config-madrid $(SLIDES)
 
-slides-metropolis: clean config-metropolis $(SLIDES) 
+slides-metropolis: config-metropolis $(SLIDES) 
 
 hangouts: $(HANDOUTS) 
 

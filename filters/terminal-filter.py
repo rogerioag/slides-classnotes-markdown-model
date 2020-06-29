@@ -21,13 +21,13 @@
 import pandocfilters as pf
 import csv, re
 
-begin_beamer = '\setbeamercolor*{block title example}{fg=darkgray!95!white,bg=darkgray!50!white}\n\setbeamercolor*{block body example}{fg=green!75!black,bg=black!80} \\begin{exampleblock}{\centering {Terminal}} \\vspace{-0.3cm}\n\\begin{lstlisting}[style=bash, frame=none, numbers=none, xleftmargin=0pt, framexleftmargin=0pt]'
+begin_beamer = '\setbeamertemplate{blocks}[rounded][shadow=false]\n\setbeamercolor*{block title example}{fg=darkgray!95!white,bg=darkgray!50!white}\n\setbeamercolor*{block body example}{fg=green!75!black,bg=black!80} \\begin{exampleblock}{\centering {Terminal}}\n\\vspace{-0.4cm}\n\\begin{lstlisting}[style=bash, frame=none, numbers=none, xleftmargin=0pt, framexleftmargin=0pt]'
 
-end_beamer = '\end{lstlisting} \\vspace{-0.3cm} \end{exampleblock}'
+end_beamer = '\end{lstlisting}\n\\vspace{-0.3cm}\n\end{exampleblock}'
 
-begin_latex = '\\begin{terminalbox}{}{\n\\vspace{-0.5cm}\n\\begin{lstlisting}[style=bash, frame=none, numbers=none, xleftmargin=0pt, framexleftmargin=0pt]'
+begin_latex = '\\begin{terminalbox}{}{\n\\vspace{-0.3cm}\n\\begin{lstlisting}[style=bash, frame=none, numbers=none, xleftmargin=0pt, framexleftmargin=0pt]'
 
-end_latex = '\end{lstlisting}}\n\end{terminalbox}'
+end_latex = '\end{lstlisting}}\n\\vspace{-0.3cm}\n\end{terminalbox}\n\\vspace{0.3cm}'
 
 def mystringify(x):
     """Walks the tree x and returns concatenated string content with formatting.

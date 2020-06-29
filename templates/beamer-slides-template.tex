@@ -79,6 +79,15 @@ $else$
     %\setbeamercolor{frametitle}{bg=Orange}
 
     \setmainfont{Fira Sans}
+    % Adjust the left margin of itemize
+    % https://tex.stackexchange.com/questions/5941/changing-left-margin-in-itemize-environment-of-beamer-class
+    % https://github.com/matze/mtheme/issues/29
+    \settowidth{\leftmargini}{\usebeamertemplate{itemize item}}
+    \addtolength{\leftmargini}{1.3\labelsep}
+    \settowidth{\leftmarginii}{\usebeamertemplate{itemize subitem}}
+    \addtolength{\leftmarginii}{1.3\labelsep}
+    \settowidth{\leftmarginiii}{\usebeamertemplate{itemize subsubitem}}
+    \addtolength{\leftmarginiii}{1.3\labelsep}
   }
   $endif$
 
