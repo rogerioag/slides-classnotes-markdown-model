@@ -28,10 +28,17 @@ banner-classnotes: figuras/banner-classnotes.pdf
   + Tópico nível 2
     - Tópico nível 3
 
+## TODO
+\todo[inline, author=\textbf{rag}]{Teste de TODO}
+
+\todo{Teste de TODO 2}
+
+
 ## Bloco
 
 * Blabla
-  \note{Nota Bla Bla}
+
+\note{Nota Bla Bla}
 
 ### Bloco Teste
 
