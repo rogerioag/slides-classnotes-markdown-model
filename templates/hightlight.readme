@@ -1,0 +1,35 @@
+# List the possible styles
+[rag@chamonix aula-005-parallel-regions]$ pandoc --list-highlight-styles
+pygments
+tango
+espresso
+zenburn
+kate
+monochrome
+breezedark
+haddock
+
+# Get highlight style
+pandoc --print-highlight-style pygments > ../templates/mycode.theme
+
+# Syntax definitions
+https://github.com/KDE/syntax-highlighting
+
+## Todas as sintaxes
+wget https://raw.githubusercontent.com/KDE/syntax-highlighting/master/data/syntax
+
+## C
+wget https://raw.githubusercontent.com/KDE/syntax-highlighting/master/data/syntax/c.xml -O ../templates/c.xml
+
+
+# Using 
+
+pandoc ... --highlight-style ../templates/mycode.theme --syntax-definition=../templates/c.xml
+
+# Ou usar sem alterações
+
+---
+output: 
+  pdf_document:
+    pandoc_args: "--highlight=breezedark"
+---

@@ -1,0 +1,7 @@
+[background]{figures/banner-cuda.pdf}
+
+## Frame Título {.fragile .allowframebreaks}
+
+* Conteúdo.
+
+[/background]

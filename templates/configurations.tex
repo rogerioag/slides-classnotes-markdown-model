@@ -16,6 +16,9 @@
 
 \usepackage{comment}
 
+\usepackage{hyperref}
+
+
 \usepackage{color}
 \usepackage{verbatim}
 
@@ -456,3 +459,9 @@ framexrightmargin=10pt
 
 \usepackage{todonotes}
 \presetkeys{todonotes}{linecolor=green!70!white, backgroundcolor=blue!30!white, bordercolor=black!50, color=blue!30, size=\normalsize}{}
+
+% Solve the problem: ! Undefined control sequence.
+% l.52   \passthrough{\lstinline!body!}.
+\newcommand{\passthrough}[1]{#1}
+%\newcommand{\passthrough}{\shorthandoff{:}\passthroughtwo}
+%\newcommand{\passthroughtwo}[1]{#1\shorthandon{:}}

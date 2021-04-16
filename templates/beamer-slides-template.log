@@ -1,0 +1,33 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2021.4.13)  15 APR 2021 12:33
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**/dados/rogerio/UTFPR/docencia/disciplinas/2021/COMP-BCC36B/2020-2/aulas/md/templates/beamer-slides-template.tex
+(/dados/rogerio/UTFPR/docencia/disciplinas/2021/COMP-BCC36B/2020-2/aulas/md/templates/beamer-slides-template.tex
+LaTeX2e <2020-10-01> patch level 2
+L3 programming layer <2020-12-03> xparse <2020-03-03>
+
+! LaTeX Error: File `$documentclass$.cls' not found.
+
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: cls)
+
+Enter file name: 
+/dados/rogerio/UTFPR/docencia/disciplinas/2021/COMP-BCC36B/2020-2/aulas/md/templates/beamer-slides-template.tex:4: Emergency stop.
+<read *> 
+         
+l.4 \setbeamertemplate
+                      {caption}[numbered]^^M
+*** (cannot \read from terminal in nonstop modes)
+
+ 
+Here is how much of TeX's memory you used:
+ 24 strings out of 479383
+ 896 string characters out of 5875830
+ 268215 words of memory out of 5000000
+ 17234 multiletter control sequences out of 15000+600000
+ 403430 words of font info for 27 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 32i,0n,39p,320b,13s stack positions out of 5000i,500n,10000p,200000b,80000s
+/dados/rogerio/UTFPR/docencia/disciplinas/2021/COMP-BCC36B/2020-2/aulas/md/templates/beamer-slides-template.tex:4:  ==> Fatal error occurred, no output PDF file produced!

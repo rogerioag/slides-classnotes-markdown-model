@@ -1,0 +1,14 @@
+license: |
+  \vspace{-2.0cm}
+  \begin{tikzpicture}[overlay, remember picture]
+    \linespread{0.75}
+    \node[above =0.1cm of current page.south, align=center] {
+      \href{https://creativecommons.org/licenses/by-nc-nd/4.0/}{\ccbyncnd}\\
+      \vspace{-0.5cm}
+      \tiny Este trabalho está licenciado com uma Licença Creative Commons -
+      Atribuição-NãoComercial-SemDerivações 4.0 Internacional.\\
+      % \tiny \href{mailto:rogerioag@utfpr.edu.br}{\nolinkurl{rogerioag@utfpr.edu.br}}
+    };
+  \end{tikzpicture}
+
+link-citations: true

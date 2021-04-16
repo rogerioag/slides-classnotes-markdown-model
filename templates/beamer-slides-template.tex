@@ -12,7 +12,7 @@ $else$
 $endif$
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
-\usepackage{fixltx2e} % provides \textsubscript
+% \usepackage{fixltx2e} % provides \textsubscript
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
   \usepackage[utf8]{inputenc}
@@ -123,7 +123,9 @@ $endif$
 }{}
 $if(lang)$
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
-  \usepackage[shorthands=off,$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
+  % \usepackage[shorthands=off,$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
+  \usepackage{polyglossia}
+  \setmainlanguage[$polyglossia-lang.options$]{$polyglossia-lang.name$}
 $if(babel-newcommands)$
   $babel-newcommands$
 $endif$
@@ -155,8 +157,20 @@ $if(csl-refs)$
   {$if(csl-hanging-indent)$\setlength{\parindent}{0pt}%
   \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces$endif$}%
   {\par}
-$endif$
 
+\newenvironment{CSLReferences}[3] % #1 hanging-ident, #2 entry sp
+{% don't indent paragraphs
+	\setlength{\parindent}{0pt}
+	% turn on hanging indent if param 1 is 1
+	\ifodd #1 \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces\fi
+	% set line spacing
+	% set entry spacing
+	\ifnum #2 > 0
+	\setlength{\parskip}{#3\baselineskip}
+	\fi
+}%
+{}
+$endif$
 
 \hypersetup{
 $if(title-meta)$
@@ -487,21 +501,27 @@ $endif$
 } % End o Else.
 $endif$
 
+$if(license)$
+\usepackage{ccicons}
+$endif$
+
 % -----------------------------------------------------------------------------------------
 % Document.
 \begin{document}
 
-$if(title)$
-\frame{\vspace{1.0cm} \titlepage}
-$endif$
-
-% Hide progress bar and footline on titlepage
 %$if(title)$
-%  \begin{frame}[plain]
-%  \titlepage
-%  \end{frame}
+%\frame{\vspace{1.0cm} \titlepage}
 %$endif$
 
+% Hide progress bar and footline on titlepage
+$if(title)$
+\begin{frame}[plain]
+  \titlepage
+  $if(license)$
+  $license$
+  $endif$
+\end{frame}
+$endif$
 
 % includes.
 $for(include-before)$

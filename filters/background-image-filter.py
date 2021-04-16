@@ -1,28 +1,27 @@
-# Converter tag terminal para um bloco. 
-# [exampleblock]{Titulo}
-# First line is the title.
-# Others are the content of block.
-# [/exempleblock]
+# Converter tag background para um bloco latex.
+# [background]{imagem.{png|pdf}}
+# ## Frame normal
+# [/background]
 ####################
-# Beamer que deve ser gerado:
-# \begin{exampleblock}{First line is the title}
-# Others are the content of block.
-# \end{exampleblock}
 # Latex que deve ser gerado:
-# \begin{pabox}{First line is the title}
-# Others are the content of block.
-# \end{pabox}
+#{
+#	\usebackgroundtemplate{%
+#		\tikz\node[opacity=0.20] {\vspace{-0.5cm}\hspace{-0.23cm};\includegraphics[height=\paperheight,width=\paperwidth]{figures/banner-cuda.pdf}};}
+#	\begin{frame}
+#    Content.
+#   \end{frame}
+#}
 
 import pandocfilters as pf
 import csv, re
 
-begin_beamer = '\begin{exampleblock}{Title}}'
+begin_beamer = r'\{\usebackgroundtemplate\{%\n\tikz\node[opacity=0.2]\n\{\includegraphics[height=\paperheight,width=\paperwidth]\{filepath\}\};\}'
 
-end_beamer = '\end{exampleblock}'
+end_beamer = '}'
 
-begin_latex = '\\begin{pabox}{Title}'
+begin_latex = ''
 
-end_latex = '\end{pabox}'
+end_latex = ''
 
 def mystringify(x):
     """Walks the tree x and returns concatenated string content with formatting.
@@ -50,9 +49,10 @@ def mystringify(x):
 # mystringify() returns: '"[terminal]SoftBreakrogerio@chamonix:hello-world$Space./hello-world.exeSoftBreakHelloSpaceWorld!!!SoftBreakTesteSoftBreak[/terminal]"
 
 def latex(s):
-    return pf.RawBlock('latex', s)
+    return pf.Raw
+    lock('latex', s)
 
-def mk_terminal(key, value, format, meta):
+def mk_background(key, value, format, meta):
     # import pdb
     # pdb.set_trace()
     if key == "Para":
@@ -68,16 +68,16 @@ def mk_terminal(key, value, format, meta):
                 code = matchObj.group(2).replace("Str", "").replace("SoftBreak", "\n").replace(",", "").replace("\"", "").replace("Space", " ")
 
                 if (format == "beamer"):
-                    begin = matchObj.group(1).replace("exampleblock", begin_beamer) + '\n'
-                    end = matchObj.group(3).replace("/exampleblock", end_beamer)
+                    begin = matchObj.group(1).replace("background", begin_beamer) + '\n'
+                    end = matchObj.group(3).replace("/background", end_beamer)
                 elif (format == "latex"):
-                    begin = matchObj.group(1).replace("exampleblock", begin_latex) + '\n'
-                    end = matchObj.group(3).replace("/exampleblock", end_latex)   
+                    begin = matchObj.group(1).replace("background", begin_latex) + '\n'
+                    end = matchObj.group(3).replace("/background", end_latex)   
 
                 # return [latex(begin)] + [latex(code)] + [latex(end)]
                 return [latex(begin + code + end)]
 
 
 if __name__ == "__main__":
-    pf.toJSONFilter(mk_terminal)
+    pf.toJSONFilter(mk_background)
     

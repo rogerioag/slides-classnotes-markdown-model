@@ -1,23 +1,36 @@
 import pandocfilters as pf
 import re
 
-# {
-# \usebackgroundtemplate{%
-#		\tikz\node[opacity=0.2] {\includegraphics[height=\paperheight,width=\paperwidth]{figuras/tux-search.png}};}
-#\begin{frame}{Perguntas?}
-#\protect\hypertarget{perguntas}{}
-#\Large
-#\centering
-
-#\textbf{Prof.~Rogério Aparecido Gonçalves}
-
-#\url{rogerioag@utfpr.edu.br}
-#\end{frame}
+# Converter tag background para um bloco latex.
+# [background]{imagem.{png|pdf}}
+# ## Frame normal
+# [/background]
+####################
+# Latex que deve ser gerado:
+#{
+#	\usebackgroundtemplate{%
+#		\tikz\node[opacity=0.20] {\vspace{-0.5cm}\hspace{-0.23cm};\includegraphics[height=\paperheight,width=\paperwidth]{figures/banner-cuda.pdf}};}
+#	\begin{frame}
+#    Content.
+#   \end{frame}
 #}
 
-beamer_code = r'\{\usebackgroundtemplate\{%\n\tikz\node[opacity=0.2]\n\{\includegraphics[height=\paperheight,width=\paperwidth]\{filepath\}\};\}'
+#[rag@chamonix tests]$ pandoc background.txt -s -t native
+#Pandoc (Meta {unMeta = fromList []})
+#[Para [Str "[background]{figures/banner-cuda.pdf}"]
+#,Header 2 ("frame-t\237tulo",["fragile","allowframebreaks"],[]) [Str "Frame",Space,Str "T\237tulo"]
+#,BulletList
+# [[Plain [Str "Conte\250do."]]]
+#,Para [Str "[/background]"]]
+#[rag@chamonix tests]$ 
 
-latex_code = '\\vspace{-0.75cm}'
+beamer_code = r'\{\usebackgroundtemplate\{%\n\tikz\node[opacity=0.2]\n\{\includegraphics[height=\paperheight,width=\paperwidth]\{filepath\}\};\}'
+# begin_beamer = '{\n\usebackgroundtemplate{%\n\tikz\node[opacity=0.20] {\vspace{-0.5cm}\hspace{-0.23cm};\includegraphics[height=\paperheight,width=\paperwidth]{figures/banner-cuda.pdf}};}'
+end_beamer = '}'
+
+begin_latex = '\\vspace{-0.75cm}'
+
+end_latex = ''
 
 def latex(s):
     return pf.RawBlock('latex', s)
