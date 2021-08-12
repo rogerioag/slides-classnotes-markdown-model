@@ -228,18 +228,6 @@ $else$
 $endif$
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\pagenumbering{arabic}
-% \lhead{\itshape $short-title$}
-\lhead{}
-\chead{}
-\rhead{\itshape{\nouppercase{\leftmark}}}
-\lfoot{v $version$}
-\cfoot{\thepage}
-\rfoot{}
-%\usepackage[left=1.5cm, right=1.5cm, top=2cm, bottom=2cm]{geometry}
-\fancyheadoffset{0.005\textwidth}
 $if(verbatim-in-note)$
 \VerbatimFootnotes % allow verbatim text in footnotes
 $endif$
@@ -258,17 +246,12 @@ $if(listings)$
 \newcommand{\passthrough}[1]{#1}
 \lstset{defaultdialect=[5.3]Lua}
 \lstset{defaultdialect=[x86masm]Assembler}
-\renewcommand{\lstlistingname}{Código}
 $endif$
 $if(lhs)$
 \lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
 $endif$
 $if(highlighting-macros)$
 $highlighting-macros$
-$endif$
-$if(verbatim-in-note)$
-\usepackage{fancyvrb}
-\VerbatimFootnotes
 $endif$
 $if(tables)$
 \usepackage{longtable,booktabs,array}
@@ -294,7 +277,7 @@ $else$
 $endif$
 $endif$
 $if(graphics)$
-\usepackage{graphicx,grffile}
+\usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
 \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
@@ -348,7 +331,6 @@ $endfor$
 $if(lang)$
 \ifXeTeX
   % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
-  % XETEX.
   \usepackage{polyglossia}
   \setmainlanguage[$for(polyglossia-lang.options)$$polyglossia-lang.options$$sep$,$endfor$]{$polyglossia-lang.name$}
 $for(polyglossia-otherlangs)$
@@ -432,30 +414,10 @@ $else$
 }
 \makeatother
 $endif$
-\subtitle{\emph{$subtitle$}}
+\subtitle{$subtitle$}
 $endif$
-%\author{$for(author)$$author$$sep$ \and $endfor$}
-$if(author)$
-\author{
-  $for(author)$
-    \normalsize\textbf{$author.name$}\footnotesize$$^$author.id$$$\vspace{0.05in} \\
-    \footnotesize$$^$author.id$$$\normalsize\emph{$author.affiliation$} \\
-    \normalsize \emph{$author.department$} \\
-    \footnotesize \hspace{1.5cm}\texttt{\url{$author.email$}} 
-    \newline \vspace*{-0.1cm} $sep$ \and
-  $endfor$
-} 
-$endif$
-
-% \date{$date$}
-$if(date)$
-\date{\footnotesize \textbf{$date$}}
-$else$
-\date{\footnotesize \textbf{\today}}
-$endif$
-$if(pagestyle)$
-\pagestyle{$pagestyle$}
-$endif$
+\author{$for(author)$$author$$sep$ \and $endfor$}
+\date{$date$}
 $if(beamer)$
 $if(institute)$
 \institute{$for(institute)$$institute$$sep$ \and $endfor$}
@@ -468,86 +430,21 @@ $if(logo)$
 $endif$
 $endif$
 
-\usepackage{float}
-\usepackage{ragged2e}
-
-$if(banner-classnotes)$
-%\begin{figure}
-%  \centering
-%  %\vspace{-1.5cm}
-%  \vfill
-%  % trim={<left> <lower> <right> <upper>}
-%  \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{$banner-classnotes$}
-%  % \vspace{-1.0cm}
-%  \vfill
-%\end{figure}
-\usepackage[cc]{titlepic}
-\titlepic{\includegraphics[width=1.0\textwidth]{$banner-classnotes$}}
-$else$
-%  \begin{figure}
-%  \centering
-%  \vspace{-1.0cm}
-%  % trim={<left> <lower> <right> <upper>}
-%  \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{../templates/logos/logo-utfpr.png}
-%  \vspace{-1.5cm}
-%\end{figure}
-\usepackage[cc]{titlepic}
-\titlepic{\includegraphics[width=1.0\textwidth]{../templates/logos/logo-utfpr.png}}
-$endif$
-
 \begin{document}
-
-% Generate Classnote banner.
-% \classnotebanner
-
-%  \titlehead{\centering\includegraphics[width=1.0\linewidth]{$banner-classnotes$}}
-%$if(banner-classnotes)$
-%\begin{figure}
-%  \centering
-%  \vspace{-1.5cm}
-%  % \includegraphics[width=0.5\linewidth]{$banner$}
-%  % trim={<left> <lower> <right> <upper>}
-%  \includegraphics[trim=0.0cm 0cm 0.0cm 0.0cm, width=1.0\linewidth]{$banner-classnotes$}
-%  \vspace{-1.0cm}
-%\end{figure}
-%$else$
-%  \begin{figure}
-%  \centering
-%  \vspace{-1.0cm}
-%  % \includegraphics[width=0.5\linewidth]{$banner$}
-%  % trim={<left> <lower> <right> <upper>}
-%  \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{../templates/logos/logo-utfpr.png}
-%  \vspace{-1.5cm}
-%\end{figure}    
-%$endif$
-
 $if(has-frontmatter)$
 \frontmatter
 $endif$
-
 $if(title)$
-%\makeatletter
-%\g@addto@macro\@maketitle{
-%\begin{figure}[H]
-%    \setlength{\linewidth}{\textwidth}
-%    \setlength{\hsize}{\textwidth}
-%    \centering
-%    \includegraphics[width=0.5\linewidth]{$banner-classnotes$}
-%    \caption{scheme}
-%    \end{figure}
-%}
+$if(beamer)$
+\frame{\titlepage}
+$else$
 \maketitle
 $endif$
-
 $if(abstract)$
 \begin{abstract}
 $abstract$
 \end{abstract}
 $endif$
-
-
-$if(license)$
-\licensebanner
 $endif$
 
 $for(include-before)$

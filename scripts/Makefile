@@ -38,8 +38,8 @@ COMMOM_OPTIONS += --verbose
 COMMOM_OPTIONS += -f markdown
 # COMMOM_OPTIONS += --listings
 #COMMOM_OPTIONS += --pdf-engine=pdflatex --pdf-engine-opt=""
-COMMOM_OPTIONS += --variable=version:2020.02
-COMMOM_OPTIONS += --metadata-file ${TEMPLATES}/metadata.yml
+COMMOM_OPTIONS += --variable=version:2021.01
+COMMOM_OPTIONS += --metadata-file ${TEMPLATES}/model-metadata.yml --metadata-file ../../../course-metadata.yml
 # COMMOM_OPTIONS += --highlight-style ${TEMPLATES}/mycode.theme 
 # COMMOM_OPTIONS += --syntax-definition=${TEMPLATES}/c.xml
 
@@ -49,11 +49,11 @@ SLIDES_OPTIONS = -t beamer
 SLIDES_OPTIONS += --template=${TEMPLATES}/beamer-slides-template.tex
 SLIDES_OPTIONS += --include-in-header=${TEMPLATES}/beamer-header.tex
 #SLIDES_OPTIONS += --default-image-extension=pdf
-SLIDES_OPTIONS += --variable=lang:pt-br --variable=babel-lang:brazil
+SLIDES_OPTIONS += --variable=lang:pt-br --variable=babel-lang:pt-BR
 SLIDES_OPTIONS += --standalone --slide-level=2
 # SLIDES_OPTIONS += -V theme:Madrid
 # SLIDES_OPTIONS += -V aspectratio=169
-SLIDES_OPTIONS += --toc
+SLIDES_OPTIONS += --toc -V toc-title:Agenda
 # needs adapted beamer template (see https://github.com/jgm/pandoc-templates/pull/211)
 SLIDES_OPTIONS += -V themeoptions:numbering=none -V themeoptions:progressbar=foot
 SLIDES_OPTIONS += --highlight-style=pygments
@@ -67,12 +67,12 @@ HANDOUTOPTIONS = -V handout
 CLASSNOTES_OPTIONS = --template=${TEMPLATES}/latex-classnotes-template.tex
 CLASSNOTES_OPTIONS += --include-in-header=${TEMPLATES}/latex-header.tex
 # CLASSNOTES_OPTIONS += -N --latex-engine=pdflatex
-CLASSNOTES_OPTIONS += --variable=lang:brazil --variable=babel-lang:brazil
+CLASSNOTES_OPTIONS += --variable=lang:pt-BR --variable=babel-lang:pt-BR
 CLASSNOTES_OPTIONS += --standalone 
 # CLASSNOTES_OPTIONS += --toc --toc-depth=2
-#CLASSNOTES_OPTIONS += --default-image-extension=pdf
+# CLASSNOTES_OPTIONS += --default-image-extension=pdf
 # CLASSNOTES_OPTIONS += -V documentclass=scrartcl -V beamerarticle
-CLASSNOTES_OPTIONS += --number-sections --toc --toc-depth=1
+CLASSNOTES_OPTIONS += --number-sections --toc --toc-depth=1 -V toc-title:Sumário
 CLASSNOTES_OPTIONS += -V geometry:left=2.0cm -V geometry:right=2.0cm -V geometry:top=2.0cm -V geometry:bottom=2.0cm -V geometry:margin=2.0cm
 CLASSNOTES_OPTIONS += -V fontsize=12pt -V papersize=a4  
 # CLASSNOTES_OPTIONS += -V mainfont="Palatino" -V sansfont="Helvetica" -V monofont="Menlo"
@@ -114,11 +114,11 @@ config-madrid:
 #SLIDES_OPTIONS += -V theme:metropolis
 # $(eval COMMOM_OPTIONS += $(shell echo '--pdf-engine=xelatex --pdf-engine-opt=""'))
 config-metropolis:
-	$(eval COMMOM_OPTIONS += $(shell echo '--pdf-engine=tectonic'))
+	$(eval COMMOM_OPTIONS += $(shell echo '--pdf-engine=xelatex'))
 	$(eval SLIDES_OPTIONS += $(shell echo '-V theme:metropolis'))
 
 config-notes:
-	$(eval COMMOM_OPTIONS += $(shell echo '--pdf-engine=tectonic'))
+	$(eval COMMOM_OPTIONS += $(shell echo '--pdf-engine=xelatex'))
 
 config-article:
 	$(eval COMMOM_OPTIONS += $(shell echo '--pdf-engine pdflatex'))

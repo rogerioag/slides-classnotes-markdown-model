@@ -231,8 +231,7 @@ $endif$
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \pagenumbering{arabic}
-% \lhead{\itshape $short-title$}
-\lhead{}
+\lhead{\itshape $title$}
 \chead{}
 \rhead{\itshape{\nouppercase{\leftmark}}}
 \lfoot{v $version$}
@@ -348,7 +347,6 @@ $endfor$
 $if(lang)$
 \ifXeTeX
   % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
-  % XETEX.
   \usepackage{polyglossia}
   \setmainlanguage[$for(polyglossia-lang.options)$$polyglossia-lang.options$$sep$,$endfor$]{$polyglossia-lang.name$}
 $for(polyglossia-otherlangs)$
@@ -468,32 +466,8 @@ $if(logo)$
 $endif$
 $endif$
 
-\usepackage{float}
-\usepackage{ragged2e}
-
-$if(banner-classnotes)$
-%\begin{figure}
-%  \centering
-%  %\vspace{-1.5cm}
-%  \vfill
-%  % trim={<left> <lower> <right> <upper>}
-%  \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{$banner-classnotes$}
-%  % \vspace{-1.0cm}
-%  \vfill
-%\end{figure}
-\usepackage[cc]{titlepic}
-\titlepic{\includegraphics[width=1.0\textwidth]{$banner-classnotes$}}
-$else$
-%  \begin{figure}
-%  \centering
-%  \vspace{-1.0cm}
-%  % trim={<left> <lower> <right> <upper>}
-%  \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{../templates/logos/logo-utfpr.png}
-%  \vspace{-1.5cm}
-%\end{figure}
-\usepackage[cc]{titlepic}
-\titlepic{\includegraphics[width=1.0\textwidth]{../templates/logos/logo-utfpr.png}}
-$endif$
+%\usepackage{titlepic}
+%\titlepic{\includegraphics[width=\textwidth]{$banner-classnotes$}}
 
 \begin{document}
 
@@ -501,41 +475,32 @@ $endif$
 % \classnotebanner
 
 %  \titlehead{\centering\includegraphics[width=1.0\linewidth]{$banner-classnotes$}}
-%$if(banner-classnotes)$
-%\begin{figure}
-%  \centering
-%  \vspace{-1.5cm}
-%  % \includegraphics[width=0.5\linewidth]{$banner$}
-%  % trim={<left> <lower> <right> <upper>}
-%  \includegraphics[trim=0.0cm 0cm 0.0cm 0.0cm, width=1.0\linewidth]{$banner-classnotes$}
-%  \vspace{-1.0cm}
-%\end{figure}
-%$else$
-%  \begin{figure}
-%  \centering
-%  \vspace{-1.0cm}
-%  % \includegraphics[width=0.5\linewidth]{$banner$}
-%  % trim={<left> <lower> <right> <upper>}
-%  \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{../templates/logos/logo-utfpr.png}
-%  \vspace{-1.5cm}
-%\end{figure}    
-%$endif$
+
+$if(banner-classnotes)$
+\begin{figure}
+  \centering
+  \vspace{-1.5cm}
+  % trim={<left> <lower> <right> <upper>}
+  \includegraphics[trim=0.0cm 0cm 0.0cm 0.0cm, width=1.0\linewidth]{$banner-classnotes$}
+  \vspace{-1.0cm}
+\end{figure}
+$else$
+  \begin{figure}
+  \centering
+  \vspace{-1.0cm}
+  % trim={<left> <lower> <right> <upper>}
+  \includegraphics[trim=0.0cm 0cm 0.0cm 0.0cm, width=1.0\linewidth]{../templates/logos/logo-utfpr.png}
+  \vspace{-1.5cm}
+\end{figure}    
+$endif$
 
 $if(has-frontmatter)$
 \frontmatter
 $endif$
 
+
+
 $if(title)$
-%\makeatletter
-%\g@addto@macro\@maketitle{
-%\begin{figure}[H]
-%    \setlength{\linewidth}{\textwidth}
-%    \setlength{\hsize}{\textwidth}
-%    \centering
-%    \includegraphics[width=0.5\linewidth]{$banner-classnotes$}
-%    \caption{scheme}
-%    \end{figure}
-%}
 \maketitle
 $endif$
 
