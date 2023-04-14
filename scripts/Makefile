@@ -20,8 +20,9 @@ PANDOC=/usr/bin/pandoc
 
 #Filters
 # FILTEROPTIONS = --filter pandoc-citeproc --csl=${DATADIR}/csl/apsa.csl --bibliography=ref.bib
-FILTEROPTIONS = --citeproc --bibliography=ref.bib --csl=${DATADIR}/csl/apsa.csl
+# FILTEROPTIONS = --citeproc --bibliography=ref.bib --csl=${DATADIR}/csl/apsa.csl
 # FILTEROPTIONS += --biblatex
+FILTEROPTIONS = --filter ${DATADIR}/filters/pandoc_run_filter.py
 FILTEROPTIONS += --filter ${DATADIR}/filters/columns-filter.py
 FILTEROPTIONS += --filter ${DATADIR}/filters/terminal-filter.py
 FILTEROPTIONS += --filter ${DATADIR}/filters/framebreaks-filter.py
@@ -29,6 +30,10 @@ FILTEROPTIONS += --filter ${DATADIR}/filters/appendix-filter.py
 FILTEROPTIONS += --filter ${DATADIR}/filters/exampleblock-filter.py
 FILTEROPTIONS += --filter ${DATADIR}/filters/hideonbeamer-with-space-filter.py
 FILTEROPTIONS += --filter ${DATADIR}/filters/background-filter.py
+# FILTEROPTIONS += --filter pandoc-xnos
+FILTEROPTIONS += --filter pandoc-crossref
+FILTEROPTIONS += --citeproc --bibliography=ref.bib --csl=${DATADIR}/csl/apsa.csl
+
 # FILTEROPTIONS += --filter ${DATADIR}/filters/hide-on-beamer-without-space-filter.py
 # COMMOM_OPTIONS += --filter ${DATADIR}/filters/change-listings-language-to-style.py
 
@@ -38,7 +43,7 @@ COMMOM_OPTIONS += --verbose
 COMMOM_OPTIONS += -f markdown
 # COMMOM_OPTIONS += --listings
 #COMMOM_OPTIONS += --pdf-engine=pdflatex --pdf-engine-opt=""
-COMMOM_OPTIONS += --variable=version:2021.01
+COMMOM_OPTIONS += --variable=version:2023.01
 COMMOM_OPTIONS += --metadata-file ${TEMPLATES}/model-metadata.yml --metadata-file ../../../course-metadata.yml
 # COMMOM_OPTIONS += --highlight-style ${TEMPLATES}/mycode.theme 
 # COMMOM_OPTIONS += --syntax-definition=${TEMPLATES}/c.xml
@@ -64,10 +69,11 @@ SLIDES_OPTIONS += --highlight-style=pygments
 HANDOUTOPTIONS = -V handout
 
 # Notes options.
-CLASSNOTES_OPTIONS = --template=${TEMPLATES}/latex-classnotes-template.tex
+CLASSNOTES_OPTIONS = -t latex
+CLASSNOTES_OPTIONS += --template=${TEMPLATES}/latex-classnotes-template.tex
 CLASSNOTES_OPTIONS += --include-in-header=${TEMPLATES}/latex-header.tex
 # CLASSNOTES_OPTIONS += -N --latex-engine=pdflatex
-CLASSNOTES_OPTIONS += --variable=lang:pt-BR --variable=babel-lang:pt-BR
+CLASSNOTES_OPTIONS += --variable=lang:pt-BR --variable=babel-lang:portugues
 CLASSNOTES_OPTIONS += --standalone 
 # CLASSNOTES_OPTIONS += --toc --toc-depth=2
 # CLASSNOTES_OPTIONS += --default-image-extension=pdf
@@ -76,6 +82,7 @@ CLASSNOTES_OPTIONS += --number-sections --toc --toc-depth=1 -V toc-title:Sumári
 CLASSNOTES_OPTIONS += -V geometry:left=2.0cm -V geometry:right=2.0cm -V geometry:top=2.0cm -V geometry:bottom=2.0cm -V geometry:margin=2.0cm
 CLASSNOTES_OPTIONS += -V fontsize=12pt -V papersize=a4  
 # CLASSNOTES_OPTIONS += -V mainfont="Palatino" -V sansfont="Helvetica" -V monofont="Menlo"
+CLASSNOTES_OPTIONS += --listings
 CLASSNOTES_OPTIONS += --highlight-style=tango
 CLASSNOTES_OPTIONS += -V colorlinks -V linkcolor=headcolor -V citecolor=headcolor -V urlcolor=headcolor
 
@@ -84,25 +91,30 @@ CLASSNOTES_OPTIONS += -V colorlinks -V linkcolor=headcolor -V citecolor=headcolo
 # Article options.
 # Notes options.
 ARTICLE_OPTIONS = --template ${TEMPLATES}/svm-latex-ms.tex
-ARTICLE_OPTIONS += --include-in-header ${TEMPLATES}/latex-header.tex
+ARTICLE_OPTIONS += --include-in-header ${TEMPLATES}/article-header.tex
 ARTICLE_OPTIONS += --pdf-engine pdflatex
-ARTICLE_OPTIONS += --variable=lang:brazil --variable=babel-lang:brazil
+ARTICLE_OPTIONS += --variable=lang:brazil --variable=babel-lang:brazil -V lang=brazil
 ARTICLE_OPTIONS += --standalone --self-contained 
 ARTICLE_OPTIONS += --number-sections
+ARTICLE_OPTIONS += --listings
 ARTICLE_OPTIONS += --highlight-style tango
+
+ARTICLE_OPTIONS += --toc --toc-depth=2 -V toc-title="Sumário"
+
+ARTICLE_OPTIONS += -V fontsize=12pt
 
 ARTICLE_OPTIONS += -V colorlinks -V linkcolor=headcolor -V citecolor=headcolor -V urlcolor=headcolor
 
-ARTICLE_OPTIONS += --lua-filter /home/rag/R/x86_64-pc-linux-gnu-library/4.0/rmarkdown/rmarkdown/lua/pagebreak.lua
+#ARTICLE_OPTIONS += --lua-filter /home/rag/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmarkdown/lua/pagebreak.lua
 
-ARTICLE_OPTIONS += --lua-filter /home/rag/R/x86_64-pc-linux-gnu-library/4.0/rmarkdown/rmarkdown/lua/latex-div.lua 
+#ARTICLE_OPTIONS += --lua-filter /home/rag/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmarkdown/lua/latex-div.lua 
 
 
 default:
 	@echo Executando make em paralelo [$(shell nproc) tarefas]
 	@make -s -j $(shell nproc) all
 
-all : slides-metropolis handouts notes
+all : wordcloud slides-metropolis handouts notes article
 
 # COMMOM_OPTIONS += --pdf-engine=pdflatex --pdf-engine-opt=""
 # SLIDES_OPTIONS += -V theme:Madrid
@@ -125,19 +137,19 @@ config-article:
 
 slides-madrid: config-madrid $(SLIDES)
 
-slides-metropolis: config-metropolis $(SLIDES) 
+slides-metropolis: config-metropolis $(SLIDES) wordcloud
 
-handouts: config-metropolis $(HANDOUTS) 
+handouts: config-metropolis $(HANDOUTS) wordcloud
 
-notes: config-notes $(NOTES)
+notes: config-notes $(NOTES) wordcloud
 
 wordcloud: $(WORDCLOUD)
 
-article: config-article $(ARTICLE)
+article: config-article $(ARTICLE) wordcloud
 
 %.md.slides.pdf : %.md
 	${PANDOC} $^ ${COMMOM_OPTIONS} ${SLIDES_OPTIONS} ${FILTEROPTIONS} -o $@
-	evince $@ &
+	okular $@ &
 
 %.md.handout.pdf : %.md
 	${PANDOC} $^ ${COMMOM_OPTIONS} ${SLIDES_OPTIONS} ${FILTEROPTIONS} ${HANDOUTOPTIONS} -o $@ 
@@ -166,8 +178,9 @@ clean:
 	rm -f $(HANDOUTS)
 	rm -f $(NOTES)
 	rm -f $(ARTICLE)
-	rm *~ *.aux *.dvi *.bbl *.blg *.log *.lot *.lof *.toc *.out *.nav *.snm *.vrb main.pdf main.synctex.gz
+	rm *~ *.aux *.dvi *.bbl *.blg *.log *.lot *.lof *.toc *.out *.nav *.snm *.vrb main.pdf main.synctex.gz 
+	rm figuras/*.md.wordcloud.png
 
 %.md.wordcloud.png: %.md
 	rm -f figuras/$@
-	python /home/rag/Documentos/wordcloud/generate-word-cloud.py --max 1000 --width 666 --height 500 $^ -o figuras/$@
+	python ${HOME}/Documentos/wordcloud/generate-word-cloud.py --max 1000 --width 666 --height 500 $^ -o figuras/$@
