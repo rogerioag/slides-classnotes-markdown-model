@@ -1,0 +1,115 @@
+% Configurações específicas para article.
+
+% Vai estar no diretório do .md, o caminho tem que ser completo para templates.
+\input{../templates/configurations}
+
+\usepackage{../templates/license-and-banner}
+
+\usepackage{multicol}
+
+\usepackage{hyperref}
+\usepackage{array}   
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{multirow}
+\usepackage{hhline}
+\usepackage{calc}
+\usepackage{tabularx}
+%\usepackage{fontawesome}
+\usepackage[para,online,flushleft]{threeparttable}
+
+% Beamer notes to latex box.
+\usepackage[most]{tcolorbox}
+\usepackage{lipsum}
+
+\usepackage{float}
+\floatplacement{figure}{H}
+
+% Colocar o caption em negrito.
+\captionsetup{labelfont=bf}
+
+\tcbuselibrary{listings,breakable}
+\newtcolorbox
+[auto counter,number within=section]{pabox}[2][]{
+  %
+  colback=darkgray!10!white,
+  colframe=darkgray!80!white,fonttitle=\bfseries,
+  coltitle=darkgray!15!white,
+  borderline={0.05mm}{0.0mm}{darkgray!10!white},
+  % distance of border.
+  left=0.5mm,right=0.5mm,top=0.5mm,bottom=0.5mm,middle=0.5mm,
+  tikz={opacity=0.7,transparency group},
+  title=Nota~\thetcbcounter: #2,#1}
+
+\newcommand\note[1]{\begin{pabox}{}{#1}\end{pabox}}
+\newcommand\pause{}
+
+%\newcommand\center[1]{\begin{center}#1\end{center}}
+
+\newtcolorbox
+[auto counter,number within=section]{terminalbox}[2][]{
+  %
+  coltext=green!75!black,
+  colback=black!95!white,
+  colframe=darkgray!50!white,fonttitle=\bfseries,
+  coltitle=darkgray!95!white,
+  borderline={0.05mm}{0.0mm}{darkgray!10!white},
+  % distance of border.
+  left=0.5mm,right=0.5mm,top=0.5mm,bottom=0.5mm,middle=0.5mm,
+  tikz={opacity=0.7,transparency group},
+  title={\centering Terminal}
+}
+
+\usepackage{xcolor}
+\definecolor{boxgrey}{RGB}{0.5,0.5,0.5}
+\definecolor{boxred}{RGB}{153, 51, 0}
+\definecolor{boxgreen}{RGB}{0, 102, 0}
+
+\usepackage{tcolorbox}
+
+% Info (information) tcolorbox
+% #1: tcolorbox options
+% #2: Box title 
+\newtcolorbox{blockbox}[2][]
+{
+colframe = black,
+colback  = black!10,
+coltitle = white, 
+left=0.5mm,right=0.5mm,top=0.5mm,bottom=0.5mm,middle=0.5mm, 
+title    = #2,
+#1,
+}
+
+% Hint tcolorbox
+% #1: tcolorbox options
+% #2: Box title
+\newtcolorbox{exampleblockbox}[2][]
+{
+colframe = boxgreen,
+colback  = boxgreen!10,
+coltitle = white,
+left=0.5mm,right=0.5mm,top=0.5mm,bottom=0.5mm,middle=0.5mm,
+title    = #2,
+#1,
+}
+
+% Warning tcolorbox
+% #1: tcolorbox options
+% #2: Box title
+\newtcolorbox{alertblockbox}[2][]
+{
+colframe = boxred,
+colback  = boxred!5!white,
+coltitle = white,
+left=0.5mm,right=0.5mm,top=0.5mm,bottom=0.5mm,middle=0.5mm,
+title    = #2,
+#1,
+}
+
+% Solve the problem: ! Undefined control sequence.
+% l.52   \passthrough{\lstinline!body!}.
+\newcommand{\passthrough}[1]{#1}
+%\newcommand{\passthrough}{\shorthandoff{:}\passthroughtwo}
+%\newcommand{\passthroughtwo}[1]{#1\shorthandon{:}}
+
