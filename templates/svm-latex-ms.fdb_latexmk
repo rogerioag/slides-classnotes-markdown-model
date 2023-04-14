@@ -1,0 +1,16 @@
+# Fdb version 3
+["pdflatex"] 1649879602 "/run/media/rag/BK-RAG-HP1TB/repositorios/Dropbox/dados/rogerio/UTFPR/docencia/disciplinas/2022/LFAC-BCC34B/2022-1/aulas/md/templates/svm-latex-ms.tex" "svm-latex-ms.pdf" "svm-latex-ms" 1649879602
+  "$fontfamily$.sty" 0 -1 0 ""
+  "/run/media/rag/BK-RAG-HP1TB/repositorios/Dropbox/dados/rogerio/UTFPR/docencia/disciplinas/2022/LFAC-BCC34B/2022-1/aulas/md/templates/svm-latex-ms.tex" 1649879601 8045 fce838da33abb76992378329c2961d69 ""
+  "/usr/share/texmf-dist/tex/generic/iftex/iftex.sty" 1640600964 6501 4011d89d9621e0b0901138815ba5ff29 ""
+  "/usr/share/texmf-dist/tex/generic/iftex/ifvtex.sty" 1640600964 1057 525c2192b5febbd8c1f662c9468335bb ""
+  "/usr/share/texmf-dist/tex/latex/base/article.cls" 1640600964 20144 8a7de377ae7a11ee924a7499611f5a9d ""
+  "/usr/share/texmf-dist/tex/latex/base/size10.clo" 1640600964 8448 96f18c76bf608a36ee6fbf021ac1dd32 ""
+  "/usr/share/texmf-dist/tex/latex/geometry/geometry.sty" 1640600964 41601 9cf6c5257b1bc7af01a58859749dd37a ""
+  "/usr/share/texmf-dist/tex/latex/graphics/keyval.sty" 1640600964 2671 4de6781a30211fe0ea4c672e4a2a8166 ""
+  "/usr/share/texmf-dist/web2c/texmf.cnf" 1640600964 39911 2da6c67557ec033436fe5418a70a8a61 ""
+  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1649874175 2920110 590a9a7fb338abcb3fa71b7c9d33b297 ""
+  "svm-latex-ms.aux" 1649879602 32 3985256e7290058c681f74d7a3565a19 ""
+  (generated)
+  "svm-latex-ms.log"
+  "svm-latex-ms.pdf"

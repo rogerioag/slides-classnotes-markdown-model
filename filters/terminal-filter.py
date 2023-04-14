@@ -70,7 +70,7 @@ def mk_terminal(key, value, format, meta):
                 # print "matchObj.group(2) : ", matchObj.group(2)
                 # print "matchObj.group(3) : ", matchObj.group(3)
 
-                code = matchObj.group(2).replace("Str", "").replace("SoftBreak", "\n").replace(",", "").replace("\"", "").replace("Space", " ")
+                code = matchObj.group(2).replace("Str", "").replace("SoftBreak", "\n").replace("\"", "").replace("Space", " ")
 
                 if (format == "beamer"):
                     begin = matchObj.group(1).replace("terminal", begin_beamer) + '\n'

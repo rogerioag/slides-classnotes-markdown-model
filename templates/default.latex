@@ -2,12 +2,7 @@
 \PassOptionsToPackage{unicode$for(hyperrefoptions)$,$hyperrefoptions$$endfor$}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 $if(colorlinks)$
-\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
-$endif$
-$if(dir)$
-$if(latex-dir-rtl)$
-\PassOptionsToPackage{RTLdocument}{bidi}
-$endif$
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 $endif$
 $if(CJKmainfont)$
 \PassOptionsToPackage{space}{xeCJK}
@@ -16,9 +11,6 @@ $endif$
 \documentclass[
 $if(fontsize)$
   $fontsize$,
-$endif$
-$if(lang)$
-  $babel-lang$,
 $endif$
 $if(papersize)$
   $papersize$paper,
@@ -156,6 +148,25 @@ $if(CJKmainfont)$
   \fi
 $endif$
 \fi
+$if(zero-width-non-joiner)$
+%% Support for zero-width non-joiner characters.
+\makeatletter
+\def\zerowidthnonjoiner{%
+  % Prevent ligatures and adjust kerning, but still support hyphenating.
+  \texorpdfstring{%
+    \TextOrMath{\nobreak\discretionary{-}{}{\kern.03em}%
+      \ifvmode\else\nobreak\hskip\z@skip\fi}{}%
+  }{}%
+}
+\makeatother
+\ifPDFTeX
+  \DeclareUnicodeCharacter{200C}{\zerowidthnonjoiner}
+\else
+  \catcode`^^^^200c=\active
+  \protected\def ^^^^200c{\zerowidthnonjoiner}
+\fi
+%% End of ZWNJ support
+$endif$
 $if(beamer)$
 $if(theme)$
 \usetheme[$for(themeoptions)$$themeoptions$$sep$,$endfor$]{$theme$}
@@ -176,16 +187,6 @@ $if(outertheme)$
 \useoutertheme{$outertheme$}
 $endif$
 $endif$
-
-% if it is a handout show the notes text; otherwise don't
-$if(handout)$
-\setbeameroption{show notes}
-\setbeamertemplate{note page}[plain]
-$else$
-\setbeameroption{hide notes}
-\setbeamertemplate{note page}[plain]
-$endif$
-
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
@@ -209,38 +210,6 @@ $if(verbatim-in-note)$
 \usepackage{fancyvrb}
 $endif$
 \usepackage{xcolor}
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
-\hypersetup{
-$if(title-meta)$
-  pdftitle={$title-meta$},
-$endif$
-$if(author-meta)$
-  pdfauthor={$author-meta$},
-$endif$
-$if(lang)$
-  pdflang={$lang$},
-$endif$
-$if(subject)$
-  pdfsubject={$subject$},
-$endif$
-$if(keywords)$
-  pdfkeywords={$for(keywords)$$keywords$$sep$, $endfor$},
-$endif$
-$if(colorlinks)$
-  colorlinks=true,
-  linkcolor={$if(linkcolor)$$linkcolor$$else$Maroon$endif$},
-  filecolor={$if(filecolor)$$filecolor$$else$Maroon$endif$},
-  citecolor={$if(citecolor)$$citecolor$$else$Blue$endif$},
-  urlcolor={$if(urlcolor)$$urlcolor$$else$Blue$endif$},
-$else$
-  hidelinks,
-$endif$
-  pdfcreator={LaTeX via pandoc}}
-\urlstyle{same} % disable monospaced font for URLs
-$if(verbatim-in-note)$
-\VerbatimFootnotes % allow verbatim text in footnotes
-$endif$
 $if(geometry)$
 $if(beamer)$
 \geometry{$for(geometry)$$geometry$$sep$,$endfor$}
@@ -301,14 +270,9 @@ $if(graphics)$
 \def\fps@figure{htbp}
 \makeatother
 $endif$
-$if(links-as-notes)$
-% Make links footnotes instead of hotlinks:
-\DeclareRobustCommand{\href}[2]{#2\footnote{\url{#1}}}
-$endif$
 $if(strikeout)$
+$-- also used for underline
 \usepackage[normalem]{ulem}
-% Avoid problems with \sout in headers with hyperref
-\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
 $endif$
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
@@ -335,35 +299,54 @@ $endif$
 $if(pagestyle)$
 \pagestyle{$pagestyle$}
 $endif$
-$for(header-includes)$
-$header-includes$
-$endfor$
+$if(csl-refs)$
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newlength{\cslentryspacingunit} % times entry-spacing
+\setlength{\cslentryspacingunit}{\parskip}
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+  \let\oldpar\par
+  \def\par{\hangindent=\cslhangindent\oldpar}
+  \fi
+  % set entry spacing
+  \setlength{\parskip}{#2\cslentryspacingunit}
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+$endif$
 $if(lang)$
-\ifXeTeX
-  % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
-  \usepackage{polyglossia}
-  \setmainlanguage[$for(polyglossia-lang.options)$$polyglossia-lang.options$$sep$,$endfor$]{$polyglossia-lang.name$}
-$for(polyglossia-otherlangs)$
-  \setotherlanguage[$for(polyglossia-otherlangs.options)$$polyglossia-otherlangs.options$$sep$,$endfor$]{$polyglossia-otherlangs.name$}
-$endfor$
+\ifLuaTeX
+\usepackage[bidi=basic]{babel}
 \else
-  \usepackage[$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
+\usepackage[bidi=default]{babel}
+\fi
+$if(babel-lang)$
+\babelprovide[main,import=$lang$]{$babel-lang$}
+$endif$
+$for(babel-otherlangs)$
+\babelprovide[import]{$babel-otherlangs$}
+$endfor$
 % get rid of language-specific shorthands (see #6817):
 \let\LanguageShortHands\languageshorthands
 \def\languageshorthands#1{}
-$if(babel-newcommands)$
-  $babel-newcommands$
 $endif$
-\fi
-$endif$
+$for(header-includes)$
+$header-includes$
+$endfor$
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 $if(dir)$
-\ifXeTeX
-  % Load bidi as late as possible as it modifies e.g. graphicx
-  \usepackage{bidi}
-\fi
 \ifPDFTeX
   \TeXXeTstate=1
   \newcommand{\RL}[1]{\beginR #1\endR}
@@ -385,31 +368,48 @@ $endif$
 $if(nocite-ids)$
 \nocite{$for(nocite-ids)$$it$$sep$, $endfor$}
 $endif$
-$if(csl-refs)$
-\newlength{\cslhangindent}
-\setlength{\cslhangindent}{1.5em}
-\newlength{\csllabelwidth}
-\setlength{\csllabelwidth}{3em}
-\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
- {% don't indent paragraphs
-  \setlength{\parindent}{0pt}
-  % turn on hanging indent if param 1 is 1
-  \ifodd #1 \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces\fi
-  % set entry spacing
-  \ifnum #2 > 0
-  \setlength{\parskip}{#2\baselineskip}
-  \fi
- }%
- {}
-\usepackage{calc}
-\newcommand{\CSLBlock}[1]{#1\hfill\break}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
-\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
-$endif$
 $if(csquotes)$
 \usepackage{csquotes}
 $endif$
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+$if(links-as-notes)$
+% Make links footnotes instead of hotlinks:
+\DeclareRobustCommand{\href}[2]{#2\footnote{\url{#1}}}
+$endif$
+$if(verbatim-in-note)$
+\VerbatimFootnotes % allow verbatim text in footnotes
+$endif$
+\hypersetup{
+$if(title-meta)$
+  pdftitle={$title-meta$},
+$endif$
+$if(author-meta)$
+  pdfauthor={$author-meta$},
+$endif$
+$if(lang)$
+  pdflang={$lang$},
+$endif$
+$if(subject)$
+  pdfsubject={$subject$},
+$endif$
+$if(keywords)$
+  pdfkeywords={$for(keywords)$$keywords$$sep$, $endfor$},
+$endif$
+$if(colorlinks)$
+  colorlinks=true,
+  linkcolor={$if(linkcolor)$$linkcolor$$else$Maroon$endif$},
+  filecolor={$if(filecolor)$$filecolor$$else$Maroon$endif$},
+  citecolor={$if(citecolor)$$citecolor$$else$Blue$endif$},
+  urlcolor={$if(urlcolor)$$urlcolor$$else$Blue$endif$},
+$else$
+$if(boxlinks)$
+$else$
+  hidelinks,
+$endif$
+$endif$
+  pdfcreator={LaTeX via pandoc}}
 
 $if(title)$
 \title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
@@ -426,130 +426,18 @@ $else$
 $endif$
 \subtitle{$subtitle$}
 $endif$
-
-$if(theme)$ % if metropolis.
-\usetheme{$theme$}
-\expandafter\ifstrequal\expandafter{$theme$}{metropolis}{
-
-\usepackage{tikz}
-\usepackage{pgfopts}
-\usepackage{calc}
-\usepackage{ifxetex}
-\usepackage{ifluatex}
-
-\metroset{block=fill,numbering=fraction,progressbar=frametitle}
-\setbeamerfont{section title}{size=\LARGE, series=\bfseries}
-\setbeamerfont{frametitle}{size=\Large, series=\bfseries}
-\setbeamertemplate{section in toc}[sections numbered]
-\setbeamertemplate{subsection in toc}[subsections numbered]
-\setbeamerfont{normal text}{size=\large}
-
-\setbeamercolor{footline}{fg=gray, bg=black}
-
-\definecolor{mycolor}{RGB}{35, 55, 59}
-
-%\setbeamerfont{frametitle}{size=\Large,series=\normalfont}
-\setbeamercolor{footline}{bg=mycolor,fg=white}
-\setbeamertemplate{frame footer}{A footline}
-
-%\makeatletter
-%\setlength{\metropolis@frametitle@padding}{1.6ex}% <- default 2.2 ex
-
-\setbeamertemplate{footline}{%
-  \begin{beamercolorbox}[wd=\textwidth, sep=1.0ex]{footline}% <- default 3ex
-    \usebeamerfont{page number in head/foot}%
-    \usebeamertemplate*{frame footer}
-    \hfill%
-    \usebeamertemplate*{frame numbering}
-  \end{beamercolorbox}%
-}
-
-\setbeamertemplate{frame footer}{\insertshortauthor~(\insertshortinstitute)\hfill\insertshorttitle\hfill}
-\setbeamerfont{page number in head/foot}{size=\tiny}
-
-\setmainfont{Fira Sans}
-% Adjust the left margin of itemize
-% https://tex.stackexchange.com/questions/5941/changing-left-margin-in-itemize-environment-of-beamer-class
-% https://github.com/matze/mtheme/issues/29
-\settowidth{\leftmargini}{\usebeamertemplate{itemize item}}
-\addtolength{\leftmargini}{2.5\labelsep}
-\settowidth{\leftmarginii}{\usebeamertemplate{itemize subitem}}
-\addtolength{\leftmarginii}{2.5\labelsep}
-\settowidth{\leftmarginiii}{\usebeamertemplate{itemize subsubitem}}
-\addtolength{\leftmarginiii}{2.5\labelsep}
-}
-{ % Madrid.
-  \usecolortheme[rgb={0.21, 0.27, 0.31}]{structure}
-}
+\author{$for(author)$$author$$sep$ \and $endfor$}
+\date{$date$}
+$if(beamer)$
+$if(institute)$
+\institute{$for(institute)$$institute$$sep$ \and $endfor$}
 $endif$
-
-$if(title)$
-% \title[$idsubjectcourseinstitution$ -- v.$version$]
-% {\texttt{$title$}}
-
-\title[$idsubjectcourseinstitution$ - $classnumber$ - v.$version$] %optional
-{\LARGE $title$}
-$endif$
-    
-$if(subtitle)$
-
-\subtitle{\Large $subtitle$}
-$endif$
-
-\author[
-$for(author)$\tiny $author.citation$$sep$ e $endfor$
-] % (optional)
-{
-$for(author)$\normalsize {$author.name$}\footnotesize\inst{$author.id$}\vspace{0.05in} $sep$ e $endfor$
-\vspace{-0.2cm}
-\newline
-% $for(author)$\normalsize\url{$author.email$}\vspace{0.05in} $sep$ e $endfor$
-$for(author)$\normalsize\href{mailto:$author.email$}{\nolinkurl{$author.email$}}$sep$ \and e $endfor$
-}
-
-\institute[UTFPR]{
-\normalsize
-$for(author)$
-\tiny \inst{$author.id$}%
-\footnotesize{\vspace{-0.15cm}$author.affiliation$ \\ \vspace{-0.15cm} $author.department$ \\ \vspace{-0.15cm} $author.citystatecountry$} $sep$ \and
-\vspace{-0.3cm}
-$endfor$
-\and
-$if(programname)$
-$programname$
-\vspace{-0.1cm}
-$endif$
-
-$if(coursename)$
-\textbf{$coursename$}
-\vspace{-0.1cm}
-\\ $subjectname$
-\vspace{0.5cm}
-$endif$
-}
-
-$if(date)$
-\date[$date$]{$date$}
-$else$
-\date[\today]{}
-$endif$
-
 $if(titlegraphic)$
-\titlegraphic{\hfill\includegraphics[height=0.95cm]{$titlegraphic$}}
-$else$
-% \titlegraphic{\hfill\includegraphics[height=0.95cm]{../templates/logos/logo-utfpr.png}}
-\titlegraphic{%
-\begin{picture}(0,0)
-  \put(310,25){\makebox(0,0)[rt]{\hfill\includegraphics[height=0.95cm]{../templates/logos/logo-utfpr.png}}}
-\end{picture}}
+\titlegraphic{\includegraphics{$titlegraphic$}}
 $endif$
-
 $if(logo)$
 \logo{\includegraphics{$logo$}}
 $endif$
-
-$if(license)$
-\usepackage{ccicons}
 $endif$
 
 \begin{document}
@@ -558,16 +446,7 @@ $if(has-frontmatter)$
 $endif$
 $if(title)$
 $if(beamer)$
-%\frame{\vspace{1.0cm} \titlepage}
-% Hide progress bar and footline on titlepage
-$if(title)$
-\begin{frame}[plain]
-  \titlepage
-  $if(license)$
-  $license$
-  $endif$
-\end{frame}
-$endif$
+\frame{\titlepage}
 $else$
 \maketitle
 $endif$
@@ -580,8 +459,8 @@ $endif$
 
 $for(include-before)$
 $include-before$
-$endfor$
 
+$endfor$
 $if(toc)$
 $if(toc-title)$
 \renewcommand*\contentsname{$toc-title$}
@@ -603,11 +482,11 @@ $endif$
 }
 $endif$
 $endif$
-$if(lot)$
-\listoftables
-$endif$
 $if(lof)$
 \listoffigures
+$endif$
+$if(lot)$
+\listoftables
 $endif$
 $if(linestretch)$
 \setstretch{$linestretch$}

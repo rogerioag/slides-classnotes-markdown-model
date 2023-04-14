@@ -13,132 +13,251 @@ $if(CJKmainfont)$
 \PassOptionsToPackage{space}{xeCJK}
 $endif$
 %
-
-\documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$lang$,$endif$$if(papersize)$$papersize$,$endif$$for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
+\documentclass[
+$if(fontsize)$
+  $fontsize$,
+$endif$
+$if(lang)$
+  $babel-lang$,
+$endif$
+$if(papersize)$
+  $papersize$paper,
+$endif$
+$if(beamer)$
+  ignorenonframetext,
+$if(handout)$
+  handout,
+$endif$
+$if(aspectratio)$
+  aspectratio=$aspectratio$,
+$endif$
+$endif$
+$for(classoption)$
+  $classoption$$sep$,
+$endfor$
+]{$documentclass$}
+$if(beamer)$
+$if(background-image)$
+\usebackgroundtemplate{%
+  \includegraphics[width=\paperwidth]{$background-image$}%
+}
+$endif$
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbols$if(navigation)$$navigation$$else$empty$endif$
+$for(beameroption)$
+\setbeameroption{$beameroption$}
+$endfor$
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+$if(section-titles)$
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{part title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{part title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+$endif$
+$endif$
+$if(beamerarticle)$
+\usepackage{beamerarticle} % needs to be loaded first
+$endif$
+\usepackage{amsmath,amssymb}
 $if(fontfamily)$
-\usepackage{$fontfamily$}
+\usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
 $else$
 \usepackage{lmodern}
 $endif$
 $if(linestretch)$
 \usepackage{setspace}
-\setstretch{$linestretch$}
 $endif$
-\usepackage{amssymb,amsmath}
-\usepackage{ifxetex,ifluatex}
-% \usepackage{fixltx2e} % provides \textsubscript
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+\usepackage{iftex}
+\ifPDFTeX
   \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
   \usepackage[utf8]{inputenc}
-  % \usepackage[$babel-lang$]{babel}  % idioma
-  %\usepackage{graphicx}
-  %\usepackage{color}
-$if(euro)$
-  \usepackage{eurosym}
-$endif$
-\else % if luatex or xelatex
-  \ifxetex
-	  \usepackage{amsmath}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+$if(mathspec)$
+  \ifXeTeX
     \usepackage{mathspec}
-    \usepackage{xltxtra,xunicode}
   \else
-    \usepackage{fontspec}
+    \usepackage{unicode-math}
   \fi
-  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-  \newcommand{\euro}{€}
+$else$
+  \usepackage{unicode-math}
+$endif$
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 $if(mainfont)$
-    \setmainfont{$mainfont$}
+  \setmainfont[$for(mainfontoptions)$$mainfontoptions$$sep$,$endfor$]{$mainfont$}
 $endif$
 $if(sansfont)$
-    \setsansfont{$sansfont$}
+  \setsansfont[$for(sansfontoptions)$$sansfontoptions$$sep$,$endfor$]{$sansfont$}
 $endif$
 $if(monofont)$
-    \setmonofont[Mapping=tex-ansi]{$monofont$}
+  \setmonofont[$for(monofontoptions)$$monofontoptions$$sep$,$endfor$]{$monofont$}
 $endif$
+$for(fontfamilies)$
+  \newfontfamily{$fontfamilies.name$}[$for(fontfamilies.options)$$fontfamilies.options$$sep$,$endfor$]{$fontfamilies.font$}
+$endfor$
 $if(mathfont)$
-    \setmathfont(Digits,Latin,Greek){$mathfont$}
+$if(mathspec)$
+  \ifXeTeX
+    \setmathfont(Digits,Latin,Greek)[$for(mathfontoptions)$$mathfontoptions$$sep$,$endfor$]{$mathfont$}
+  \else
+    \setmathfont[$for(mathfontoptions)$$mathfontoptions$$sep$,$endfor$]{$mathfont$}
+  \fi
+$else$
+  \setmathfont[$for(mathfontoptions)$$mathfontoptions$$sep$,$endfor$]{$mathfont$}
+$endif$
+$endif$
+$if(CJKmainfont)$
+  \ifXeTeX
+    \usepackage{xeCJK}
+    \setCJKmainfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmainfont$}
+  \fi
+$endif$
+$if(luatexjapresetoptions)$
+  \ifLuaTeX
+    \usepackage[$for(luatexjapresetoptions)$$luatexjapresetoptions$$sep$,$endfor$]{luatexja-preset}
+  \fi
+$endif$
+$if(CJKmainfont)$
+  \ifLuaTeX
+    \usepackage[$for(luatexjafontspecoptions)$$luatexjafontspecoptions$$sep$,$endfor$]{luatexja-fontspec}
+    \setmainjfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmainfont$}
+  \fi
 $endif$
 \fi
-% use upquote if available, for straight quotes in verbatim environments
+$if(beamer)$
+$if(theme)$
+\usetheme[$for(themeoptions)$$themeoptions$$sep$,$endfor$]{$theme$}
+$endif$
+$if(colortheme)$
+\usecolortheme{$colortheme$}
+$endif$
+$if(fonttheme)$
+\usefonttheme{$fonttheme$}
+$endif$
+$if(mainfont)$
+\usefonttheme{serif} % use mainfont rather than sansfont for slide text
+$endif$
+$if(innertheme)$
+\useinnertheme{$innertheme$}
+$endif$
+$if(outertheme)$
+\useoutertheme{$outertheme$}
+$endif$
+$endif$
+% Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-% use microtype if available
-\IfFileExists{microtype.sty}{%
-\usepackage{microtype}
-\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[$for(microtypeoptions)$$microtypeoptions$$sep$,$endfor$]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-$if(geometry)$
-\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+$if(indent)$
+$else$
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
 $endif$
-\ifxetex
-  \usepackage[setpagesize=false, % page size defined by xetex
-              unicode=false, % unicode breaks when used with xetex
-              xetex]{hyperref}
-\else
-  \usepackage[unicode=true]{hyperref}
-\fi
-\hypersetup{breaklinks=true,
-            bookmarks=true,
-            pdfauthor={$author-meta$},
-            pdftitle={$title-meta$},
-            colorlinks=true,
-            citecolor=$if(citecolor)$$citecolor$$else$blue$endif$,
-            urlcolor=$if(urlcolor)$$urlcolor$$else$blue$endif$,
-            linkcolor=$if(linkcolor)$$linkcolor$$else$magenta$endif$,
-            pdfborder={0 0 0}}
-\urlstyle{same}  % don't use monospace font for urls
+$if(verbatim-in-note)$
+\usepackage{fancyvrb}
+$endif$
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+$if(title-meta)$
+  pdftitle={$title-meta$},
+$endif$
+$if(author-meta)$
+  pdfauthor={$author-meta$},
+$endif$
+$if(lang)$
+  pdflang={$lang$},
+$endif$
+$if(subject)$
+  pdfsubject={$subject$},
+$endif$
+$if(keywords)$
+  pdfkeywords={$for(keywords)$$keywords$$sep$, $endfor$},
+$endif$
+$if(colorlinks)$
+  colorlinks=true,
+  linkcolor={$if(linkcolor)$$linkcolor$$else$Maroon$endif$},
+  filecolor={$if(filecolor)$$filecolor$$else$Maroon$endif$},
+  citecolor={$if(citecolor)$$citecolor$$else$Blue$endif$},
+  urlcolor={$if(urlcolor)$$urlcolor$$else$Blue$endif$},
+$else$
+  hidelinks,
+$endif$
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \pagenumbering{arabic}
-\lhead{\itshape $title$}
+% \lhead{\itshape $short-title$}
+\lhead{}
 \chead{}
 \rhead{\itshape{\nouppercase{\leftmark}}}
 \lfoot{v $version$}
-\cfoot{}
-\rfoot{\thepage}
-$if(lang)$
-\ifxetex
-  \usepackage{polyglossia}
-  \setmainlanguage{$mainlang$}
-  \setotherlanguages{$for(otherlang)$$otherlang$$sep$,$endfor$}
-\else
-  \usepackage[shorthands=off,$lang$]{babel}
-\fi
+\cfoot{\thepage}
+\rfoot{}
+%\usepackage[left=1.5cm, right=1.5cm, top=2cm, bottom=2cm]{geometry}
+\fancyheadoffset{0.005\textwidth}
+$if(verbatim-in-note)$
+\VerbatimFootnotes % allow verbatim text in footnotes
 $endif$
-
-$if(csl-refs)$
-\newlength{\cslhangindent}
-\setlength{\cslhangindent}{1.5em}
-\newenvironment{cslreferences}%
-{$if(csl-hanging-indent)$\setlength{\parindent}{0pt}%
-	\everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces$endif$}%
-{\par}
-
-\newenvironment{CSLReferences}[3] % #1 hanging-ident, #2 entry sp
-{% don't indent paragraphs
-	\setlength{\parindent}{0pt}
-	% turn on hanging indent if param 1 is 1
-	\ifodd #1 \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces\fi
-	% set line spacing
-	% set entry spacing
-	\ifnum #2 > 0
-	\setlength{\parskip}{#3\baselineskip}
-	\fi
-}%
-{}
+$if(geometry)$
+$if(beamer)$
+\geometry{$for(geometry)$$geometry$$sep$,$endfor$}
+$else$
+\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
 $endif$
-
-$if(natbib)$
-\usepackage{natbib}
-\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
 $endif$
-$if(biblatex)$
-\usepackage{biblatex}
-$for(bibliography)$
-\addbibresource{$bibliography$}
-$endfor$
+$if(beamer)$
+\newif\ifbibliography
 $endif$
 $if(listings)$
 \usepackage{listings}
+\newcommand{\passthrough}[1]{#1}
+\lstset{defaultdialect=[5.3]Lua}
+\lstset{defaultdialect=[x86masm]Assembler}
 \renewcommand{\lstlistingname}{Código}
 $endif$
 $if(lhs)$
@@ -152,7 +271,27 @@ $if(verbatim-in-note)$
 \VerbatimFootnotes
 $endif$
 $if(tables)$
-\usepackage{longtable,booktabs}
+\usepackage{longtable,booktabs,array}
+$if(multirow)$
+\usepackage{multirow}
+$endif$
+\usepackage{calc} % for calculating minipage widths
+$if(beamer)$
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+$else$
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+$endif$
 $endif$
 $if(graphics)$
 \usepackage{graphicx,grffile}
@@ -164,40 +303,138 @@ $if(graphics)$
 % margins by default, and it is still possible to overwrite the defaults
 % using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
 $endif$
 $if(links-as-notes)$
 % Make links footnotes instead of hotlinks:
-\renewcommand{\href}[2]{#2\footnote{\url{#1}}}
+\DeclareRobustCommand{\href}[2]{#2\footnote{\url{#1}}}
 $endif$
 $if(strikeout)$
 \usepackage[normalem]{ulem}
-% avoid problems with \sout in headers with hyperref:
+% Avoid problems with \sout in headers with hyperref
 \pdfstringdefDisableCommands{\renewcommand{\sout}{}}
 $endif$
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt plus 2pt minus 1pt}
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 $if(numbersections)$
-\setcounter{secnumdepth}{5}
+\setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
 $else$
-\setcounter{secnumdepth}{0}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 $endif$
-$if(verbatim-in-note)$
-\VerbatimFootnotes % allows verbatim text in footnotes
+$if(beamer)$
+$else$
+$if(block-headings)$
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+$endif$
+$endif$
+$if(pagestyle)$
+\pagestyle{$pagestyle$}
+$endif$
+$for(header-includes)$
+$header-includes$
+$endfor$
+$if(lang)$
+\ifXeTeX
+  % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
+  % XETEX.
+  \usepackage{polyglossia}
+  \setmainlanguage[$for(polyglossia-lang.options)$$polyglossia-lang.options$$sep$,$endfor$]{$polyglossia-lang.name$}
+$for(polyglossia-otherlangs)$
+  \setotherlanguage[$for(polyglossia-otherlangs.options)$$polyglossia-otherlangs.options$$sep$,$endfor$]{$polyglossia-otherlangs.name$}
+$endfor$
+\else
+  \usepackage[$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+$if(babel-newcommands)$
+  $babel-newcommands$
+$endif$
+\fi
+$endif$
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+$if(dir)$
+\ifXeTeX
+  % Load bidi as late as possible as it modifies e.g. graphicx
+  \usepackage{bidi}
+\fi
+\ifPDFTeX
+  \TeXXeTstate=1
+  \newcommand{\RL}[1]{\beginR #1\endR}
+  \newcommand{\LR}[1]{\beginL #1\endL}
+  \newenvironment{RTL}{\beginR}{\endR}
+  \newenvironment{LTR}{\beginL}{\endL}
+\fi
+$endif$
+$if(natbib)$
+\usepackage[$natbiboptions$]{natbib}
+\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
+$endif$
+$if(biblatex)$
+\usepackage[$if(biblio-style)$style=$biblio-style$,$endif$$for(biblatexoptions)$$biblatexoptions$$sep$,$endfor$]{biblatex}
+$for(bibliography)$
+\addbibresource{$bibliography$}
+$endfor$
+$endif$
+$if(nocite-ids)$
+\nocite{$for(nocite-ids)$$it$$sep$, $endfor$}
+$endif$
+$if(csl-refs)$
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1 \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces\fi
+  % set entry spacing
+  \ifnum #2 > 0
+  \setlength{\parskip}{#2\baselineskip}
+  \fi
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+$endif$
+$if(csquotes)$
+\usepackage{csquotes}
 $endif$
 
 $if(title)$
-  \title{
-    $title$
-    $if(subtitle)$
-      \\\vspace{0.3em}
-      \large \emph{$subtitle$}
-    $endif$
-  }
+\title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
 $endif$
-
+$if(subtitle)$
+$if(beamer)$
+$else$
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+$endif$
+\subtitle{\emph{$subtitle$}}
+$endif$
+%\author{$for(author)$$author$$sep$ \and $endfor$}
 $if(author)$
 \author{
   $for(author)$
@@ -207,175 +444,136 @@ $if(author)$
     \footnotesize \hspace{1.5cm}\texttt{\url{$author.email$}} 
     \newline \vspace*{-0.1cm} $sep$ \and
   $endfor$
-}
+} 
 $endif$
 
+% \date{$date$}
 $if(date)$
 \date{\footnotesize \textbf{$date$}}
 $else$
 \date{\footnotesize \textbf{\today}}
 $endif$
+$if(pagestyle)$
+\pagestyle{$pagestyle$}
+$endif$
+$if(beamer)$
+$if(institute)$
+\institute{$for(institute)$$institute$$sep$ \and $endfor$}
+$endif$
+$if(titlegraphic)$
+\titlegraphic{\includegraphics{$titlegraphic$}}
+$endif$
+$if(logo)$
+\logo{\includegraphics{$logo$}}
+$endif$
+$endif$
 
-\usepackage{multicol}
+\usepackage{float}
+\usepackage{ragged2e}
 
-$for(header-includes)$
-$header-includes$
-$endfor$
-
-% Redefines (sub)paragraphs to behave more like sections
-\ifx\paragraph\undefined\else
-\let\oldparagraph\paragraph
-\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
-\fi
-\ifx\subparagraph\undefined\else
-\let\oldsubparagraph\subparagraph
-\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
-\fi
-
-\usepackage{todonotes}
-% Beamer notes to latex box.
-\usepackage[most]{tcolorbox}
-\usepackage{lipsum}
-
-\tcbuselibrary{listings,breakable}
-\newtcolorbox
-[auto counter,number within=section]{pabox}[2][]{
-  %
-  colback=darkgray!10!white,
-  colframe=darkgray!80!white,fonttitle=\bfseries,
-  coltitle=darkgray!15!white,
-  borderline={0.05mm}{0.0mm}{darkgray!10!white},
-  % distance of border.
-  left=0.5mm,right=0.5mm,top=0.5mm,bottom=0.5mm,middle=0.5mm,
-  tikz={opacity=0.7,transparency group},
-  title=Nota~\thetcbcounter: #2,#1}
-
-\newcommand\note[1]{\begin{pabox}{}{#1}\end{pabox}}
-\newcommand\pause{}
-
-%\newcommand\center[1]{\begin{center}#1\end{center}}
-
-\newtcolorbox
-[auto counter,number within=section]{terminalbox}[2][]{
-  %
-  coltext=green!75!black,
-  colback=black!95!white,
-  colframe=darkgray!50!white,fonttitle=\bfseries,
-  coltitle=darkgray!95!white,
-  borderline={0.05mm}{0.0mm}{darkgray!10!white},
-  % distance of border.
-  left=0.5mm,right=0.5mm,top=0.5mm,bottom=0.5mm,middle=0.5mm,
-  tikz={opacity=0.7,transparency group},
-  title={\centering Terminal}
-}
-
-\usepackage{xcolor}
-\definecolor{boxgrey}{RGB}{0.5,0.5,0.5}
-\definecolor{boxred}{RGB}{153, 51, 0}
-\definecolor{boxgreen}{RGB}{0, 102, 0}
-
-\usepackage{tcolorbox}
-
-% Info (information) tcolorbox
-% #1: tcolorbox options
-% #2: Box title 
-\newtcolorbox{blockbox}[2][]
-{
-colframe = black,
-colback  = black!10,
-coltitle = white, 
-left=0.5mm,right=0.5mm,top=0.5mm,bottom=0.5mm,middle=0.5mm, 
-title    = #2,
-#1,
-}
-
-% Hint tcolorbox
-% #1: tcolorbox options
-% #2: Box title
-\newtcolorbox{exampleblockbox}[2][]
-{
-colframe = boxgreen,
-colback  = boxgreen!10,
-coltitle = white,
-left=0.5mm,right=0.5mm,top=0.5mm,bottom=0.5mm,middle=0.5mm,
-title    = #2,
-#1,
-}
-
-% Warning tcolorbox
-% #1: tcolorbox options
-% #2: Box title
-\newtcolorbox{alertblockbox}[2][]
-{
-colframe = boxred,
-colback  = boxred!5!white,
-coltitle = white,
-left=0.5mm,right=0.5mm,top=0.5mm,bottom=0.5mm,middle=0.5mm,
-title    = #2,
-#1,
-}
-
-$if(license)$
-\usepackage{ccicons}
+$if(banner-classnotes)$
+%\begin{figure}
+%  \centering
+%  %\vspace{-1.5cm}
+%  \vfill
+%  % trim={<left> <lower> <right> <upper>}
+%  \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{$banner-classnotes$}
+%  % \vspace{-1.0cm}
+%  \vfill
+%\end{figure}
+\usepackage[cc]{titlepic}
+\titlepic{\includegraphics[width=1.0\textwidth]{$banner-classnotes$}}
+$else$
+%  \begin{figure}
+%  \centering
+%  \vspace{-1.0cm}
+%  % trim={<left> <lower> <right> <upper>}
+%  \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{../templates/logos/logo-utfpr.png}
+%  \vspace{-1.5cm}
+%\end{figure}
+\usepackage[cc]{titlepic}
+\titlepic{\includegraphics[width=1.0\textwidth]{../templates/logos/logo-utfpr.png}}
 $endif$
 
 \begin{document}
-$if(banner-classnotes)$
-\begin{figure}
-  \centering
-  \vspace{-1.5cm}
-  % \includegraphics[width=0.5\linewidth]{$banner$}
-  % trim={<left> <lower> <right> <upper>}
-  \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{$banner-classnotes$}
-  \vspace{-1.0cm}
-\end{figure}
-$else$
-  \begin{figure}
-  \centering
-  \vspace{-1.0cm}
-  % \includegraphics[width=0.5\linewidth]{$banner$}
-  % trim={<left> <lower> <right> <upper>}
-  \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{../templates/logos/logo-utfpr.png}
-  \vspace{-1.5cm}
-\end{figure}    
+
+% Generate Classnote banner.
+% \classnotebanner
+
+%  \titlehead{\centering\includegraphics[width=1.0\linewidth]{$banner-classnotes$}}
+%$if(banner-classnotes)$
+%\begin{figure}
+%  \centering
+%  \vspace{-1.5cm}
+%  % \includegraphics[width=0.5\linewidth]{$banner$}
+%  % trim={<left> <lower> <right> <upper>}
+%  \includegraphics[trim=0.0cm 0cm 0.0cm 0.0cm, width=1.0\linewidth]{$banner-classnotes$}
+%  \vspace{-1.0cm}
+%\end{figure}
+%$else$
+%  \begin{figure}
+%  \centering
+%  \vspace{-1.0cm}
+%  % \includegraphics[width=0.5\linewidth]{$banner$}
+%  % trim={<left> <lower> <right> <upper>}
+%  \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{../templates/logos/logo-utfpr.png}
+%  \vspace{-1.5cm}
+%\end{figure}    
+%$endif$
+
+$if(has-frontmatter)$
+\frontmatter
 $endif$
 
 $if(title)$
+%\makeatletter
+%\g@addto@macro\@maketitle{
+%\begin{figure}[H]
+%    \setlength{\linewidth}{\textwidth}
+%    \setlength{\hsize}{\textwidth}
+%    \centering
+%    \includegraphics[width=0.5\linewidth]{$banner-classnotes$}
+%    \caption{scheme}
+%    \end{figure}
+%}
 \maketitle
 $endif$
+
 $if(abstract)$
 \begin{abstract}
 $abstract$
 \end{abstract}
 $endif$
 
-%\begin{center}
-%  \href{https://creativecommons.org/licenses/by-nc-nd/4.0/}{\ccbyncnd}\\
-%    \tiny Este trabalho está licenciado com uma Licença Creative Commons -
-%    Atribuição-NãoComercial-SemDerivações 4.0 Internacional.\\  
-%\end{center}
 
-\begin{tikzpicture}[overlay, remember picture]
-  \linespread{0.75}
-  \node[above =0.1cm of current page.south, align=center] {
-    \href{https://creativecommons.org/licenses/by-nc-nd/4.0/}{\ccbyncnd }\\
-    \vspace{-0.5cm}
-    \tiny Este trabalho está licenciado com uma Licença Creative Commons -
-    Atribuição-NãoComercial-SemDerivações 4.0 Internacional.\\
-    % \tiny \href{mailto:rogerioag@utfpr.edu.br}{\nolinkurl{rogerioag@utfpr.edu.br}}
-  };
-\end{tikzpicture}
+$if(license)$
+\licensebanner
+$endif$
 
 $for(include-before)$
 $include-before$
-$endfor$
 
+$endfor$
 $if(toc)$
+$if(toc-title)$
+\renewcommand*\contentsname{$toc-title$}
+$endif$
+$if(beamer)$
+\begin{frame}[allowframebreaks]
+$if(toc-title)$
+  \frametitle{$toc-title$}
+$endif$
+  \tableofcontents[hideallsubsections]
+\end{frame}
+$else$
 {
-\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$black$endif$}
+$if(colorlinks)$
+\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
+$endif$
 \setcounter{tocdepth}{$toc-depth$}
 \tableofcontents
 }
+$endif$
 $endif$
 $if(lot)$
 \listoftables
@@ -383,23 +581,46 @@ $endif$
 $if(lof)$
 \listoffigures
 $endif$
+$if(linestretch)$
+\setstretch{$linestretch$}
+$endif$
+$if(has-frontmatter)$
+\mainmatter
+$endif$
 $body$
 
+$if(has-frontmatter)$
+\backmatter
+$endif$
 $if(natbib)$
 $if(bibliography)$
 $if(biblio-title)$
-$if(book-class)$
+$if(has-chapters)$
 \renewcommand\bibname{$biblio-title$}
 $else$
 \renewcommand\refname{$biblio-title$}
 $endif$
 $endif$
-\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+$if(beamer)$
+\begin{frame}[allowframebreaks]{$biblio-title$}
+  \bibliographytrue
+$endif$
+  \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+$if(beamer)$
+\end{frame}
+$endif$
 
 $endif$
 $endif$
 $if(biblatex)$
+$if(beamer)$
+\begin{frame}[allowframebreaks]{$biblio-title$}
+  \bibliographytrue
+  \printbibliography[heading=none]
+\end{frame}
+$else$
 \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+$endif$
 
 $endif$
 $for(include-after)$

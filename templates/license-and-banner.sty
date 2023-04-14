@@ -1,0 +1,46 @@
+% This package and overleaf do not work well together
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{../templates/license-and-banner}[]
+
+\RequirePackage{ccicons}
+
+% Generate the license banner.
+\newcommand{\licensebanner}{
+%\begin{center}
+%  \href{https://creativecommons.org/licenses/by-nc-nd/4.0/}{\ccbyncnd}\\
+%    \tiny Este trabalho está licenciado com uma Licença Creative Commons -
+%    Atribuição-NãoComercial-SemDerivações 4.0 Internacional.\\  
+%\end{center}
+
+\begin{tikzpicture}[overlay, remember picture]
+  \linespread{0.75}
+  \node[above =0.1cm of current page.south, align=center] {
+    \href{https://creativecommons.org/licenses/by-nc-nd/4.0/}{\ccbyncnd }\\
+    \vspace{-0.5cm}
+    \tiny Este trabalho está licenciado com uma Licença Creative Commons -
+    Atribuição-NãoComercial-SemDerivações 4.0 Internacional.\\
+    % \tiny \href{mailto:rogerioag@utfpr.edu.br}{\nolinkurl{rogerioag@utfpr.edu.br}}
+  };
+\end{tikzpicture}   
+}
+
+% Generate the classnote banner.
+\newcommand{\classnotebanner}{
+$if(banner-classnotes)$
+\begin{figure}
+  \centering
+  \vspace{-1.5cm}
+  % trim={<left> <lower> <right> <upper>}
+  \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{$banner-classnotes$}
+  \vspace{-1.0cm}
+\end{figure}
+$else$
+  \begin{figure}
+  \centering
+  \vspace{-1.0cm}
+  % trim={<left> <lower> <right> <upper>}
+  \includegraphics[trim=0.0cm 22cm 0.0cm 0.0cm, width=1.0\linewidth]{../templates/logos/logo-utfpr.png}
+  \vspace{-1.5cm}
+\end{figure}    
+$endif$
+}

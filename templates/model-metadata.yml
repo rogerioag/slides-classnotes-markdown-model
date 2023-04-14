@@ -5,10 +5,18 @@ license: |
     \node[above =0.1cm of current page.south, align=center] {
       \href{https://creativecommons.org/licenses/by-nc-nd/4.0/}{\ccbyncnd}\\
       \vspace{-0.5cm}
-      \tiny Este trabalho está licenciado com uma Licença Creative Commons -
+      \tiny Este trabalho está licenciado com uma Licença Creative Commons Teste -
       Atribuição-NãoComercial-SemDerivações 4.0 Internacional.\\
       % \tiny \href{mailto:rogerioag@utfpr.edu.br}{\nolinkurl{rogerioag@utfpr.edu.br}}
     };
   \end{tikzpicture}
 
 link-citations: true
+
+babel-lang: brazil
+polyglossia-lang:
+  name: portuguese
+  options: variant=brazilian
+polyglossia-otherlangs:
+  - name: portuguese
+    options: variant=brazilian

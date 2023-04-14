@@ -18,8 +18,9 @@
 
 \usepackage{hyperref}
 
-
 \usepackage{verbatim}
+
+\usepackage{caption}
 
 \usepackage{listings} % display code on slides; don't forget [fragile] option after \begin{frame}
 \usepackage{lstlisting-llvm}
@@ -451,16 +452,29 @@ framexrightmargin=10pt
 }
 
 \renewcommand{\lstlistingname}{Código}
+\renewcommand{\figurename}{Figura}
+\renewcommand{\tablename}{Tabela}
 
 %%% RAG----------------------------------------------------------------%
 
 %------------------------------------- Fonts and Colors ---------------------
 
 \usepackage{todonotes}
-\presetkeys{todonotes}{linecolor=green!70!white, backgroundcolor=blue!30!white, bordercolor=black!50, color=blue!30, size=\normalsize}{}
+\presetkeys{todonotes}{inline, linecolor=green!70!white, backgroundcolor=blue!30!white, bordercolor=black!50, color=blue!30, size=\normalsize}{}
 
 % Solve the problem: ! Undefined control sequence.
 % l.52   \passthrough{\lstinline!body!}.
-\newcommand{\passthrough}[1]{#1}
+% \newcommand{\passthrough}[1]{#1}
 %\newcommand{\passthrough}{\shorthandoff{:}\passthroughtwo}
 %\newcommand{\passthroughtwo}[1]{#1\shorthandon{:}}
+
+
+\usepackage{graphicx}
+
+% https://stackoverflow.com/questions/47962960/r-markdown-version-of-framesubtitle
+% Tentativa de colocar blocos como subtítulos dos frames.
+% \usepackage{environ}
+% \RenewEnviron{block}[1]{\framesubtitle{#1}\BODY}
+
+
+\usepackage[multiple]{footmisc}
